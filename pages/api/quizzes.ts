@@ -5,6 +5,13 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const result = await prisma.quiz.findMany({});
-  res.status(200).json(result);
+  const result = await prisma.quiz.findMany({
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      questions: true,
+    },
+  });
+  res.json(result);
 }
