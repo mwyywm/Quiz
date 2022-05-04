@@ -5,11 +5,11 @@ type Props = {
   children: ReactNode;
 };
 
-const Layout: React.FC = ({ children }: Props) => (
-  <div>
+const Layout = ({ children }: Props) => (
+  <>
     <Header />
-    <div className="max-w-full w-[1200px] mx-auto px-2 mt-28">{children}</div>
-  </div>
+    <div className="mx-auto mt-28 w-[1200px] max-w-full px-2">{children}</div>
+  </>
 );
 
 export default Layout;

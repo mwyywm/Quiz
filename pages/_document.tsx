@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <body className="bg-darkbg text-white font-sans">
+        <body className="bg-darkbg font-sans text-white">
           <Main />
           <NextScript />
         </body>

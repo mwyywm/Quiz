@@ -5,10 +5,6 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const result = await prisma.user.create({
-    data: {
-      ...req.body,
-    },
-  });
-  res.json(result);
+  const result = await prisma.quiz.findMany({});
+  res.status(200).json(result);
 }

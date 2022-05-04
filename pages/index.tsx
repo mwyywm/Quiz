@@ -6,20 +6,21 @@ const Landing = () => {
   return (
     <Layout>
       <div>
-        <div className="max-w-full w-[650px] mx-auto ">
-          <h1 className="text-center text-5xl font-semibold antialiased">
-            Voluptate dicta sed eveniet dolores qui. Eveniet quisquam quisquam!
-          </h1>
-          <p className="text-center text-xl font-normal mt-5 text-gray-300 antialiased">
-            Take a quiz from the list below or create your own! See how you
-            score compared to everyone else.
-          </p>
-        </div>
-        <div>
-          <Button>Create quiz</Button>
-          <Button>hello</Button>
-          <Button variant="secondary">hello</Button>
-        </div>
+        <section>
+          <div className="mx-auto w-[650px] max-w-full">
+            <h1 className="text-center text-5xl font-bold antialiased">
+              Create your own quiz!
+            </h1>
+            <p className="mt-5 text-center text-xl font-normal text-gray-300 antialiased">
+              Complete a quiz from the list below or create your own! See how
+              you score compared to everyone else.
+            </p>
+          </div>
+          <div className="mx-auto mt-4 flex w-[300px] justify-between">
+            <Button>Create quiz</Button>
+            <Button variant="secondary">hello</Button>
+          </div>
+        </section>
       </div>
     </Layout>
   );

@@ -13,13 +13,14 @@ export default function Button({
   return (
     <button
       className={clsx(
+        "min-w-[140px] rounded-sm p-4 px-6 font-medium transition-colors",
         [
           variant === "primary" &&
-            "bg-amber-500 text-black font-medium p-4 px-6 rounded-sm transition-colors hover:bg-amber-400",
+            "border border-amber-500 bg-amber-500 text-black hover:bg-[#ffad21]",
         ],
         [
           variant === "secondary" &&
-            "text-amber-400 p-4 px-6 outline outline-1 outline-amber-400 rounded-sm transition-colors hover:bg-amber-400 hover:text-black  focus:bg-amber-400 focus:text-black",
+            "border border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-black  focus:bg-amber-500 focus:text-black",
         ]
       )}
       onClick={onClick}
@@ -28,3 +29,4 @@ export default function Button({
     </button>
   );
 }
+// TODO: The colors here should eventually be changed. At least the hover bg-color.
