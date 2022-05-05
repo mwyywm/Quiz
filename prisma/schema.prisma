@@ -17,9 +17,17 @@ model Quiz {
 }
 
 model Question {
-  id       Int    @id @default(autoincrement())
-  quiz     Quiz   @relation(fields: [quizId], references: [id])
-  quizId   Int
-  question String @unique
-  answer   String
+  id            Int      @id @default(autoincrement())
+  quiz          Quiz     @relation(fields: [quizId], references: [id])
+  quizId        Int
+  question      String   @unique
+  answers       answer[]
+  correctAnswer String
+}
+
+model answer {
+  id         Int      @id @default(autoincrement())
+  question   Question @relation(fields: [quizId], references: [id])
+  quizId Int
+  answer     String
 }

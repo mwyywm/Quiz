@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 
-// get specific quiz
+// GET specific quiz by id
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
   const result = await prisma.quiz.findUnique({
@@ -12,7 +12,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       id: true,
       title: true,
       description: true,
-      questions: true,
+      questions: {
+        select: {
+          id: true,
+          question: true,
+          correctAnswer: true,
+          answers: true,
+        },
+      },
     },
   });
   return res.json(result);

@@ -1,9 +1,10 @@
 import Layout from "../../components/Layout";
+import QuizForm from "../../components/QuizForm";
 
 const CreateQuizPage = () => {
   return (
     <Layout>
-      <section>
+      <section className="mb-24">
         <div className="mx-auto w-[650px] max-w-full">
           <h1 className="text-center text-5xl font-bold antialiased">
             Create a quiz!
@@ -14,6 +15,11 @@ const CreateQuizPage = () => {
             per question. After you submit a quiz you will get a link that you
             can share.
           </p>
+        </div>
+      </section>
+      <section>
+        <div className="mx-auto w-[650px] max-w-full">
+          <QuizForm />
         </div>
       </section>
     </Layout>
