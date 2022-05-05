@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../components/Layout";
-import Button from "../components/Button";
 import QuizButton from "../components/QuizButton";
+import LinkAsButton from "../components/LinkAsButton";
 
 const Landing = () => {
   const mockData = [
@@ -22,10 +22,12 @@ const Landing = () => {
         </div>
         <div className="mx-auto mt-16 flex flex-wrap justify-center">
           <div className="m-2">
-            <Button>Create quiz</Button>
+            <LinkAsButton href="/createquiz">Create quiz</LinkAsButton>
           </div>
           <div className="m-2">
-            <Button variant="secondary">Random quiz</Button>
+            <LinkAsButton href="/createquiz" variant="secondary">
+              Random quiz
+            </LinkAsButton>
           </div>
         </div>
       </section>
@@ -33,7 +35,7 @@ const Landing = () => {
         <h2 className="text-center text-4xl font-bold">Most popular</h2>
         <div className="mt-12">
           {mockData.map((quiz) => (
-            <div className="m-auto my-5 w-[650px] max-w-full">
+            <div className="m-auto my-5 w-[650px] max-w-full" key={quiz.name}>
               <QuizButton name={quiz.name} questions={quiz.questions} />
             </div>
           ))}
