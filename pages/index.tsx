@@ -29,11 +29,11 @@ const Landing = () => {
           </div>
         </div>
       </section>
-      <section className="min-h-[200px] bg-slate-800">
+      <section className="min-h-[200px] ">
         <h2 className="text-center text-4xl font-bold">Most popular</h2>
-        <div className="">
+        <div className="mt-12">
           {mockData.map((quiz) => (
-            <div className="m-auto my-5 ">
+            <div className="m-auto my-5 w-[650px] max-w-full">
               <QuizButton name={quiz.name} questions={quiz.questions} />
             </div>
           ))}

@@ -5,9 +5,10 @@ interface Props {
 
 const QuizButton = ({ name, questions }: Props) => {
   return (
-    <div className="flex justify-between bg-amber-500 p-4 text-black">
-      <p>{name}</p>
-    </div>
+    <button className="flex h-16 w-full items-center justify-between bg-amber-500 p-4 text-black transition-colors hover:bg-[#ffad21]">
+      <p className="text-xl">{name}</p>
+      <p className="text-xl">{questions} questions</p>
+    </button>
   );
 };
 
