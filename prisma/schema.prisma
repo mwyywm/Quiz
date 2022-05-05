@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider             = "mysql"
+  provider             = "postgresql"
   url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
@@ -21,13 +21,7 @@ model Question {
   quiz          Quiz     @relation(fields: [quizId], references: [id])
   quizId        Int
   question      String   @unique
-  answers       answer[]
   correctAnswer String
+  answers String[]
 }
 
-model answer {
-  id         Int      @id @default(autoincrement())
-  question   Question @relation(fields: [quizId], references: [id])
-  quizId Int
-  answer     String
-}
