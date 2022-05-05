@@ -1,32 +1,24 @@
 import clsx from "clsx";
 
 export interface Props {
-  children: React.ReactNode;
-  onClick?: () => void;
   variant?: "primary" | "secondary";
+  children: React.ReactNode;
 }
-export default function Button({
-  children,
-  onClick,
-  variant = "primary",
-}: Props) {
+export default function Button({ variant = "primary", ...props }: Props) {
   return (
     <button
       className={clsx(
-        "min-w-[140px] rounded-sm p-4 px-6 font-medium transition-colors",
-        [
-          variant === "primary" &&
-            "border border-amber-500 bg-amber-500 text-black hover:bg-[#ffad21]",
-        ],
-        [
-          variant === "secondary" &&
-            "border border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-black  focus:bg-amber-500 focus:text-black",
-        ]
+        "h-14 min-w-[160px] rounded-sm p-4 px-6 font-medium transition-colors",
+        {
+          "border border-amber-500 bg-amber-500 text-black hover:bg-[#ffad21]":
+            variant === "primary",
+          "border border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-black focus:bg-amber-500 focus:text-black":
+            variant === "secondary",
+        }
       )}
-      onClick={onClick}
+      {...props}
     >
-      {children}
+      {props.children}
     </button>
   );
 }
-// TODO: The colors here should eventually be changed. At least the hover bg-color.

@@ -1,27 +1,44 @@
 import React from "react";
 import Layout from "../components/Layout";
 import Button from "../components/Button";
+import QuizButton from "../components/QuizButton";
 
 const Landing = () => {
+  const mockData = [
+    { name: "Pokemon quiz", questions: 5 },
+    { name: "YouTube quiz", questions: 12 },
+  ];
   return (
     <Layout>
-      <div>
-        <section>
-          <div className="mx-auto w-[650px] max-w-full">
-            <h1 className="text-center text-5xl font-bold antialiased">
-              Create your own quiz!
-            </h1>
-            <p className="mt-5 text-center text-xl font-normal text-gray-300 antialiased">
-              Complete a quiz from the list below or create your own! See how
-              you score compared to everyone else.
-            </p>
-          </div>
-          <div className="mx-auto mt-4 flex w-[300px] justify-between">
+      <section className="mb-24">
+        <div className="mx-auto w-[650px] max-w-full">
+          <h1 className="text-center text-5xl font-bold antialiased">
+            Create your own quiz!
+          </h1>
+          <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
+            Complete a quiz from the list below or create your own! See how you
+            score compared to everyone else.
+          </p>
+        </div>
+        <div className="mx-auto mt-16 flex flex-wrap justify-center">
+          <div className="m-2">
             <Button>Create quiz</Button>
-            <Button variant="secondary">hello</Button>
           </div>
-        </section>
-      </div>
+          <div className="m-2">
+            <Button variant="secondary">Random quiz</Button>
+          </div>
+        </div>
+      </section>
+      <section className="min-h-[200px] bg-slate-800">
+        <h2 className="text-center text-4xl font-bold">Most popular</h2>
+        <div className="">
+          {mockData.map((quiz) => (
+            <div className="m-auto my-5 ">
+              <QuizButton name={quiz.name} questions={quiz.questions} />
+            </div>
+          ))}
+        </div>
+      </section>
     </Layout>
   );
 };
