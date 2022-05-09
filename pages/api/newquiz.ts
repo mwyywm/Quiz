@@ -9,24 +9,24 @@ export default async function quizHandler(
 ) {
   // title, description, questions (array of objects)
   const body = req.body;
-  // questions: { question, answers (array of answers), correctAnswer }
-  let arr = [
-    {
-      question: "Random question 1",
-      correctAnswer: "right",
-      answers: ["11231223", "4535236"],
-    },
-    {
-      question: "Random question 2",
-      correctAnswer: "123",
-      answers: ["163623", "456", "hi"],
-    },
-    {
-      question: "Random question 3",
-      correctAnswer: "321",
-      answers: ["1211233", "4513136"],
-    },
-  ];
+  // questions: { question, correctAnswer, answers (array of answers) }
+  // body questions example = [
+  //   {
+  //     question: "Random question 1",
+  //     correctAnswer: "11231223",
+  //     answers: ["11231223", "4535236"],
+  //   },
+  //   {
+  //     question: "Random question 2",
+  //     correctAnswer: "hi",
+  //     answers: ["163623", "456", "hi"],
+  //   },
+  //   {
+  //     question: "Random question 3",
+  //     correctAnswer: "4513136",
+  //     answers: ["1211233", "4513136"],
+  //   },
+  // ];
   if (req.method === "POST") {
     try {
       const result = await prisma.quiz.create({
@@ -36,7 +36,7 @@ export default async function quizHandler(
           description: body.description,
           questions: {
             createMany: {
-              data: arr, // array of objects holding questions{question, correctAnswer, answers (array of answers)}
+              data: body.questions, // array of objects holding questions{question, correctAnswer, answers (array of answers)}
             },
           },
         },
