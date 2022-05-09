@@ -36,10 +36,12 @@ export default function App() {
     // fill state with ids when we add a new field
     const fieldIds = () => fields.map((x) => x.id.toString());
     for (const elem of fieldIds()) {
-      setAnswerAmount((prevState) => ({
-        ...prevState,
-        [elem]: Array.from({ length: 2 }),
-      }));
+      if (!answerAmount[elem]) {
+        setAnswerAmount((prevState) => ({
+          ...prevState,
+          [elem]: Array.from({ length: 2 }),
+        }));
+      }
     }
   }, [fields]);
 
@@ -67,7 +69,7 @@ export default function App() {
               )}]}`}
               {...register(`questions[${index}].question`, {})}
             />
-            {(answerAmount[field.id] || answerAmount.init).map(
+            {(answerAmount[field.id] || answerAmount.init || ["", ""]).map(
               (val, i: number) => (
                 <div className="flex justify-center" key={i}>
                   <input
