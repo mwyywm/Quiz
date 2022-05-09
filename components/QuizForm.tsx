@@ -1,8 +1,9 @@
 // react hook form import
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-interface Ansif {
-  [key: string]: undefined[] | [undefined, undefined];
+interface answerAmountType {
+  init: undefined[];
+  [key: string]: undefined[] | [undefined];
 }
 
 export default function App() {
@@ -11,26 +12,27 @@ export default function App() {
     control,
     name: "questions",
   });
-  const [answerAmount, setAnswerAmount] = useState<Ansif>({
+  const [answerAmount, setAnswerAmount] = useState<answerAmountType>({
     init: [undefined, undefined],
   });
   const onSubmit = (data: any) => {
     setData(data);
   };
-  const handleNewQuestion = async (id) => {
-    const AddQuestion = () => {
-      const arrLen = answerAmount[id].length;
+  const handleNewQuestion = (id: string) => {
+    const AddQuestion = (arrLen: number): number | undefined => {
       if (arrLen >= 2 && arrLen < 4) {
         return arrLen + 1;
       } else if (arrLen === 4) {
         return 4;
       }
+      return;
     };
-    await setAnswerAmount((prevState) => ({
+    setAnswerAmount((prevState) => ({
       ...prevState,
-      [id]: Array.from({ length: AddQuestion() }),
+      [id]: Array.from({
+        length: AddQuestion(answerAmount[id]!.length) as number,
+      }),
     }));
-    console.log(answerAmount);
   };
   useEffect(() => {
     // fill state with ids when we add a new field
@@ -111,7 +113,7 @@ export default function App() {
         </button>
         <input className="text-white" type="submit" />
       </form>
-      <pre>{JSON.stringify(data)}</pre>
+      <p>{JSON.stringify(data)}</p>
     </>
   );
 }
