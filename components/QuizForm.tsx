@@ -1,19 +1,49 @@
 // react hook form import
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+interface Ansif {
+  [key: string]: undefined[] | [undefined, undefined];
+}
 
-export default function QuizForm() {
-  const { register, control, handleSubmit, reset, watch } = useForm({});
+export default function App() {
+  const { register, control, handleSubmit, watch } = useForm({});
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
   });
+  const [answerAmount, setAnswerAmount] = useState<Ansif>({
+    init: [undefined, undefined],
+  });
   const onSubmit = (data: any) => {
-    console.log(data);
     setData(data);
   };
-  const [data, setData] = useState(null);
+  const handleNewQuestion = async (id) => {
+    const AddQuestion = () => {
+      const arrLen = answerAmount[id].length;
+      if (arrLen >= 2 && arrLen < 4) {
+        return arrLen + 1;
+      } else if (arrLen === 4) {
+        return 4;
+      }
+    };
+    await setAnswerAmount((prevState) => ({
+      ...prevState,
+      [id]: Array.from({ length: AddQuestion() }),
+    }));
+    console.log(answerAmount);
+  };
+  useEffect(() => {
+    // fill state with ids when we add a new field
+    const fieldIds = () => fields.map((x) => x.id.toString());
+    for (const elem of fieldIds()) {
+      setAnswerAmount((prevState) => ({
+        ...prevState,
+        [elem]: Array.from({ length: 2 }),
+      }));
+    }
+  }, [fields]);
 
+  const [data, setData] = useState(null);
   return (
     <>
       <h1>QuizForm</h1>
@@ -37,37 +67,49 @@ export default function QuizForm() {
               )}]}`}
               {...register(`questions[${index}].question`, {})}
             />
-            {Array.from({ length: 4 }).map((val, i: number) => (
-              <React.Fragment key={i}>
-                <input
-                  placeholder={`questions[${index}].answer[${JSON.stringify(
-                    field.id
-                  )}]`}
-                  {...register(`questions[${index}].answer[${i}]`, {})}
-                />
-                <input
-                  type="radio"
-                  value={watch(`questions[${index}].answer[${i}]`)}
-                  {...register(`questions[${index}].correctAnswer`, {})}
-                />
-              </React.Fragment>
-            ))}
+            {(answerAmount[field.id] || answerAmount.init).map(
+              (val, i: number) => (
+                <div className="flex justify-center" key={i}>
+                  <input
+                    placeholder={`questions[${index}].answer[${JSON.stringify(
+                      field.id
+                    )}]`}
+                    {...register(`questions[${index}].answer[${i}]`, {
+                      required: true,
+                    })}
+                  />
+                  <input
+                    type="radio"
+                    value={watch(`questions[${index}].answer[${i}]`)}
+                    {...register(`questions[${index}].correctAnswer`, {
+                      required: true,
+                    })}
+                  />
+                </div>
+              )
+            )}
+            <button
+              className="text-white"
+              onClick={() => handleNewQuestion(field.id)}
+            >
+              Add another answer
+            </button>
             <button className="text-white" onClick={() => remove(index)}>
-              Remove
+              Remove question
             </button>
           </React.Fragment>
         ))}
         <button
           className="text-white"
           onClick={() => {
-            append({});
+            append({ id: "hey", question: "", answer: [] });
           }}
         >
-          append
+          New question
         </button>
         <input className="text-white" type="submit" />
       </form>
-      <code>{JSON.stringify(data)}</code>
+      <pre>{JSON.stringify(data)}</pre>
     </>
   );
 }
