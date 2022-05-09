@@ -12,6 +12,7 @@ datasource db {
 model Quiz {
   id          Int        @id @default(autoincrement())
   title       String     @unique
+  slug       String     @unique
   description String
   questions   Question[]
 }

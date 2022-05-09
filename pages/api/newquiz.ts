@@ -1,12 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
+import slugify from "../../utils/slugify";
 
 // create a new quiz
 export default async function quizHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // title, description, questions (array of objects)
   const body = req.body;
+  // questions: { question, answers (array of answers), correctAnswer }
   let arr = [
     {
       question: "Random question 1",
@@ -24,17 +27,16 @@ export default async function quizHandler(
       answers: ["1211233", "4513136"],
     },
   ];
-  // title, description, questions (array of questions)
-  // questions: { question, answers (array of answers), correctAnswer }
   if (req.method === "POST") {
     try {
       const result = await prisma.quiz.create({
         data: {
           title: body.title,
+          slug: slugify(body.title),
           description: body.description,
           questions: {
             createMany: {
-              data: arr,
+              data: arr, // array of objects holding questions{question, correctAnswer, answers (array of answers)}
             },
           },
         },
