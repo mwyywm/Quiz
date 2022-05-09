@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 
 export default function QuizForm() {
   const { register, control, handleSubmit, reset, watch } = useForm({});
-  const { fields, append, prepend, remove, swap, move, insert, replace } =
-    useFieldArray({
-      control,
-      name: "questions",
-    });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "questions",
+  });
   const onSubmit = (data: any) => {
     console.log(data);
     setData(data);
@@ -38,13 +37,20 @@ export default function QuizForm() {
               )}]}`}
               {...register(`questions[${index}].question`, {})}
             />
-            {["", ""].map((answer: string, i: number) => (
-              <input
-                placeholder={`questions[${index}].answer[${JSON.stringify(
-                  field.id
-                )}]`}
-                {...register(`questions[${index}].answer[${i}]`, {})}
-              />
+            {Array.from({ length: 4 }).map((val, i: number) => (
+              <React.Fragment key={i}>
+                <input
+                  placeholder={`questions[${index}].answer[${JSON.stringify(
+                    field.id
+                  )}]`}
+                  {...register(`questions[${index}].answer[${i}]`, {})}
+                />
+                <input
+                  type="radio"
+                  value={watch(`questions[${index}].answer[${i}]`)}
+                  {...register(`questions[${index}].correctAnswer`, {})}
+                />
+              </React.Fragment>
             ))}
             <button className="text-white" onClick={() => remove(index)}>
               Remove
