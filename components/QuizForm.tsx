@@ -1,13 +1,15 @@
 // react hook form import
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, useFieldArray, appendErrors } from "react-hook-form";
 import React, { useState, useEffect } from "react";
+import { DevTool } from "@hookform/devtools";
+import clsx from "clsx";
 interface answerAmountType {
   init: undefined[];
   [key: string]: undefined[] | [undefined];
 }
 
 export default function App() {
-  const { register, control, handleSubmit, watch } = useForm({});
+  const { register, control, handleSubmit, watch, setFocus } = useForm({});
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
@@ -15,6 +17,7 @@ export default function App() {
   const [answerAmount, setAnswerAmount] = useState<answerAmountType>({
     init: [undefined, undefined],
   });
+  const [data, setData] = useState(null);
   const onSubmit = (data: any) => {
     setData(data);
   };
@@ -46,17 +49,20 @@ export default function App() {
       }
     }
   }, [fields]);
+  useEffect(() => {
+    setFocus("title");
+  }, []);
 
-  const [data, setData] = useState(null);
   return (
     <>
       <h1 className="mt-4 text-lg text-white">QuizForm</h1>
       <form
-        onSubmit={handleSubmit(onSubmit)}
         className="flex w-full flex-col text-black"
+        onSubmit={handleSubmit(onSubmit)}
       >
+        <DevTool control={control} />
         <input
-          placeholder="quiztitle"
+          placeholder="title"
           {...register("title", { required: true })}
           className="mb-2 h-10 w-full pl-1"
         />
@@ -72,7 +78,7 @@ export default function App() {
             </label>
             <input
               placeholder={`question ${index + 1}`}
-              {...register(`questions[${index}].question`, {})}
+              {...register(`questions[${index}].question`, { required: true })}
               className="mb-2 h-10 w-full pl-1"
             />
             {(answerAmount[field.id] || answerAmount.init || ["", ""]).map(
@@ -95,32 +101,54 @@ export default function App() {
                 </div>
               )
             )}
-
-            {!(answerAmount[field.id]?.length === 4) && (
-              <button
-                className="my-1 rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]"
-                onClick={() => handleNewQuestion(field.id)}
-              >
-                Add another answer
-              </button>
-            )}
-            <button
-              className="my-1 rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]"
-              onClick={() => remove(index)}
-            >
-              Remove question {index + 1}
-            </button>
+            <div className="flex w-full items-center justify-center">
+              {!(answerAmount[field.id]?.length === 4) && (
+                <input
+                  value="Add answer"
+                  className="my-1 mr-1 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]"
+                  onClick={() => handleNewQuestion(field.id)}
+                />
+              )}
+              <input
+                value={`Remove question ${index + 1}`}
+                className={clsx(
+                  "my-1 ml-1 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
+                  {
+                    "ml-0": answerAmount[field.id]?.length === 4, // resetting margin left when we only show 1 element
+                  }
+                )}
+                onClick={() => remove(index)}
+              />
+            </div>
           </React.Fragment>
         ))}
-        <button
-          className="text-white"
+        <input
+          value="Add question"
+          className="my-1 cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]"
           onClick={() => {
-            append({ id: "hey", question: "", answer: [] });
+            append({ question: "", answer: [] });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              append({ question: "", answer: [] });
+            }
+          }}
+        />
+        <button
+          className="my-1 cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]"
+          type="submit"
+          onClick={() => {
+            handleSubmit(onSubmit);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit(onSubmit);
+            }
           }}
         >
-          New question
+          Submit
         </button>
-        <input className="text-white" type="submit" />
       </form>
       <p>{JSON.stringify(data)}</p>
     </>

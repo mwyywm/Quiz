@@ -21,6 +21,7 @@
     "react-markdown": "8.0.3"
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.1.0",
     "@types/node": "16.11.33",
     "@types/react": "17.0.44",
     "autoprefixer": "^10.4.7",
