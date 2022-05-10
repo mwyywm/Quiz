@@ -1,5 +1,5 @@
 // react hook form import
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import React, { useState, useEffect } from "react";
 interface answerAmountType {
   init: undefined[];
@@ -50,37 +50,40 @@ export default function App() {
   const [data, setData] = useState(null);
   return (
     <>
-      <h1>QuizForm</h1>
+      <h1 className="mt-4 text-lg text-white">QuizForm</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col text-black"
+        className="flex w-full flex-col text-black"
       >
         <input
           placeholder="quiztitle"
           {...register("title", { required: true })}
+          className="mb-2 h-10 w-full pl-1"
         />
         <input
           placeholder="description"
           {...register("description", { required: true })}
+          className="h-10 w-full pl-1"
         />
         {fields.map((field: any, index: number) => (
           <React.Fragment key={index}>
+            <label className="mt-4 text-lg text-white">
+              Question {index + 1}
+            </label>
             <input
-              placeholder={`questions[${index}].question[${JSON.stringify(
-                field.id
-              )}]}`}
+              placeholder={`question ${index + 1}`}
               {...register(`questions[${index}].question`, {})}
+              className="mb-2 h-10 w-full pl-1"
             />
             {(answerAmount[field.id] || answerAmount.init || ["", ""]).map(
               (val, i: number) => (
-                <div className="flex justify-center" key={i}>
+                <div className="flex items-center justify-center" key={i}>
                   <input
-                    placeholder={`questions[${index}].answer[${JSON.stringify(
-                      field.id
-                    )}]`}
+                    placeholder={`answer ${i + 1}`}
                     {...register(`questions[${index}].answer[${i}]`, {
                       required: true,
                     })}
+                    className="my-1 h-10 w-full pl-1"
                   />
                   <input
                     type="radio"
@@ -92,14 +95,20 @@ export default function App() {
                 </div>
               )
             )}
+
+            {!(answerAmount[field.id]?.length === 4) && (
+              <button
+                className="my-1 rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]"
+                onClick={() => handleNewQuestion(field.id)}
+              >
+                Add another answer
+              </button>
+            )}
             <button
-              className="text-white"
-              onClick={() => handleNewQuestion(field.id)}
+              className="my-1 rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]"
+              onClick={() => remove(index)}
             >
-              Add another answer
-            </button>
-            <button className="text-white" onClick={() => remove(index)}>
-              Remove question
+              Remove question {index + 1}
             </button>
           </React.Fragment>
         ))}
