@@ -14,23 +14,23 @@ export default function App() {
     control,
     handleSubmit,
     setFocus,
-    formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
+    setError,
+    clearErrors,
+    formState,
+    reset,
+    watch,
   } = useForm({});
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
   });
-  console.log("isValid", isValid);
-  console.log("isSubmitting", isSubmitting);
-  console.log("isSubmitSucessful", isSubmitSuccessful);
-
   // in answerAmount we have an array for every field.id we have in the form.
   // answerAmount[field.id] holds an array of undefined values. The length of this array is the amount of answers for that field.
   const [answerAmount, setAnswerAmount] = useState<answerAmountType>({
     init: [undefined, undefined],
   });
-
   const [data, setData] = useState({});
+  const questionsArr = watch("questions");
   const onSubmit = (data: any) => {
     // looping over the questions array and adding the correctAnswer as a string
     const formattedQuestions = data.questions.map((obj: any, i: number) => {
@@ -44,11 +44,10 @@ export default function App() {
       description: data.description,
       questions: formattedQuestions,
     });
-
     fetch("/api/newquiz", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify({
         title: data.title,
@@ -57,10 +56,23 @@ export default function App() {
       }),
     })
       .then((res) => {
-        console.log(res);
+        if (!res.ok) {
+          throw new Error("Something went wrong");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("data", data);
+        console.log(
+          "data sent to server, should redirect to another component or page now"
+        );
+        clearErrors("post");
       })
       .catch((err) => {
-        console.log(err);
+        setError("post", {
+          type: "submit",
+          message: err,
+        });
       });
   };
   const handleNewQuestion = (id: string) => {
@@ -79,8 +91,9 @@ export default function App() {
       }),
     }));
   };
+
   useEffect(() => {
-    // fill state with ids when we add a new field
+    // fill answerAmount state with ids when we add a new question
     const fieldIds = () => fields.map((x) => x.id.toString());
     for (const elem of fieldIds()) {
       if (!answerAmount[elem]) {
@@ -92,16 +105,23 @@ export default function App() {
     }
   }, [fields]);
   useEffect(() => {
+    // handling errors when we dont have a question in the form
+    if (questionsArr?.length === 0) {
+      return setError("submit", {
+        type: "custom",
+        message: "Please add a question",
+      });
+    } else if (questionsArr?.length > 0) {
+      clearErrors("submit");
+    }
+  }, [questionsArr]);
+  useEffect(() => {
     setFocus("title");
   }, []);
-  useEffect(() => {
-    console.log(isSubmitting);
-  }, [isValid]);
-
   return (
     <>
       <DevTool control={control} />
-      <h1 className="mt-4 text-lg text-white">QuizForm</h1>
+      <h2 className="mt-4 text-lg text-white">QuizForm</h2>
       <form
         className="flex w-full flex-col text-black"
         onSubmit={handleSubmit(onSubmit)}
@@ -124,8 +144,13 @@ export default function App() {
             },
           })}
           className="h-10 w-full pl-1"
+          onKeyDown={(e) => {
+            e.key === "Enter" && e.preventDefault();
+          }}
         />
-        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+        {formState.errors.title && (
+          <p className="text-red-500">{formState.errors.title.message}</p>
+        )}
         <input
           placeholder="Description"
           {...register("description", {
@@ -140,9 +165,12 @@ export default function App() {
             },
           })}
           className="mt-2 h-10 w-full pl-1"
+          onKeyDown={(e) => {
+            e.key === "Enter" && e.preventDefault();
+          }}
         />
-        {errors.description?.message && (
-          <p className="text-red-500">{errors.description.message}</p>
+        {formState.errors.description?.message && (
+          <p className="text-red-500">{formState.errors.description.message}</p>
         )}
         {fields.map((field, index: number) => (
           <React.Fragment key={index}>
@@ -155,16 +183,19 @@ export default function App() {
                 required: "Question is required",
               })}
               className="h-10 w-full pl-1"
+              onKeyDown={(e) => {
+                e.key === "Enter" && e.preventDefault();
+              }}
             />
-            {errors.questions?.[index] && (
+            {formState.errors.questions?.[index] && (
               <p className="text-red-500">
-                {errors.questions?.[index]?.question?.message}
+                {formState.errors.questions?.[index]?.question?.message}
               </p>
             )}
             {(answerAmount[field.id] || answerAmount.init).map(
               (val, i: number) => (
-                <>
-                  <div className="flex items-center justify-center" key={i}>
+                <React.Fragment key={i + index}>
+                  <div className="flex items-center justify-center">
                     <input
                       placeholder={`answer ${i + 1}`}
                       {...register(`questions[${index}].answers[${i}]`, {
@@ -174,6 +205,9 @@ export default function App() {
                         "my-1 mt-2 h-10 w-full rounded-sm pl-1",
                         "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
                       )}
+                      onKeyDown={(e) => {
+                        e.key === "Enter" && e.preventDefault();
+                      }}
                     />
                     <input
                       type="radio"
@@ -183,19 +217,25 @@ export default function App() {
                         required:
                           "You must select a correct answer for this question",
                       })}
+                      onKeyDown={(e) => {
+                        e.key === "Enter" && e.preventDefault();
+                      }}
                     />
                   </div>
-                  {errors.questions?.[index] && (
+                  {formState.errors.questions?.[index] && (
                     <p className="text-red-500">
-                      {errors.questions?.[index].answers?.[i]?.message}
+                      {
+                        formState.errors.questions?.[index].answers?.[i]
+                          ?.message
+                      }
                     </p>
                   )}
-                </>
+                </React.Fragment>
               )
             )}
-            {errors.questions?.[index] && (
+            {formState.errors.questions?.[index] && (
               <p className="text-red-500">
-                {errors.questions?.[index].correctAnswer?.message}
+                {formState.errors.questions?.[index].correctAnswer?.message}
               </p>
             )}
             <div className="flex w-full items-center justify-center">
@@ -205,6 +245,12 @@ export default function App() {
                   readOnly
                   className="my-1 mr-1 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]"
                   onClick={() => handleNewQuestion(field.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleNewQuestion(field.id);
+                    }
+                  }}
                 />
               )}
               <input
@@ -217,6 +263,12 @@ export default function App() {
                   }
                 )}
                 onClick={() => remove(index)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    remove(index);
+                  }
+                }}
               />
             </div>
           </React.Fragment>
@@ -230,34 +282,37 @@ export default function App() {
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
+              e.preventDefault();
               append({ question: "", answers: [] });
             }
           }}
         />
+        {formState.errors.submit && (
+          <p className="text-red-500">{formState.errors.submit?.message}</p>
+        )}
+        {formState.errors.post && (
+          <p className="text-red-500">{formState.errors.post?.message}</p>
+        )}
         <button
           className={clsx(
             "my-1 rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]",
             {
-              ["cursor-not-allowed opacity-50 hover:bg-amber-500"]: !isValid,
-              ["cursor-pointer"]: isValid,
-              ["cursor-auto"]: isSubmitting || isSubmitSuccessful,
+              ["cursor-pointer"]: formState.isValid,
             }
           )}
           type="submit"
-          disabled={!isValid || isSubmitting || isSubmitSuccessful}
           onClick={() => {
-            if (isValid) {
+            if (formState.isValid) {
               handleSubmit(onSubmit);
             }
           }}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && isValid) {
-              e.preventDefault();
+            if (e.key === "Enter") {
               handleSubmit(onSubmit);
             }
           }}
         >
-          Submit
+          {formState.isSubmitSuccessful ? "Submitted!" : "Submit"}
         </button>
       </form>
       <p>{JSON.stringify(data)}</p>
