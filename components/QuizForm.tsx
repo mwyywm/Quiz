@@ -9,22 +9,27 @@ interface answerAmountType {
 }
 
 export default function App() {
-  const { register, control, handleSubmit, setFocus, formState, getValues } =
-    useForm({});
-  const { isDirty, isSubmitting, isSubmitSuccessful, isValid } = formState;
+  const {
+    register,
+    control,
+    handleSubmit,
+    setFocus,
+    formState: { errors },
+  } = useForm({});
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
   });
+  console.log(errors);
   // in answerAmount we have an array for every field.id we have in the form.
   // answerAmount[field.id] holds an array of undefined values. The length of this array is the amount of answers for that field.
   const [answerAmount, setAnswerAmount] = useState<answerAmountType>({
     init: [undefined, undefined],
   });
+
   const [data, setData] = useState({});
   const onSubmit = (data: any) => {
     // looping over the questions array and adding the correctAnswer as a string
-    console.log(data);
     const formattedQuestions = data.questions.map((obj: any, i: number) => {
       return {
         ...obj,
@@ -96,53 +101,92 @@ export default function App() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
-          placeholder="title"
+          placeholder="Title"
           {...register("title", {
-            required: true,
-            maxLength: 80,
-            minLength: 3,
-            pattern: /^[a-zA-Z-0-9 ]*$/,
-          })}
-          className="mb-2 h-10 w-full pl-1"
-        />
-        <input
-          placeholder="description"
-          {...register("description", {
-            required: "Description required",
-            minLength: 3,
-            maxLength: 160,
+            required: "Title is required",
+            maxLength: {
+              value: 60,
+              message: "Title must be 60 characters or less",
+            },
+            minLength: {
+              value: 4,
+              message: "Title must be at least 4 characters",
+            },
+            pattern: {
+              value: /^[a-zA-Z0-9 ]*$/,
+              message: "Title must be alphanumeric.",
+            },
           })}
           className="h-10 w-full pl-1"
         />
-        {fields.map((field: any, index: number) => (
+        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+        <input
+          placeholder="Description"
+          {...register("description", {
+            required: "Description is required",
+            minLength: {
+              value: 5,
+              message: "Description must be at least 5 characters",
+            },
+            maxLength: {
+              value: 150,
+              message: "Description must be 150 characters or less",
+            },
+          })}
+          className="mt-2 h-10 w-full pl-1"
+        />
+        {errors.description?.message && (
+          <p className="text-red-500">{errors.description.message}</p>
+        )}
+        {fields.map((field, index: number) => (
           <React.Fragment key={index}>
             <label className="mt-4 text-lg text-white">
               Question {index + 1}
             </label>
             <input
               placeholder={`question ${index + 1}`}
-              {...register(`questions[${index}].question`, { required: true })}
-              className="mb-2 h-10 w-full pl-1"
+              {...register(`questions[${index}].question`, {
+                required: "Question is required",
+              })}
+              className="h-10 w-full pl-1"
             />
-            {(answerAmount[field.id] || answerAmount.init || ["", ""]).map(
+            {errors.questions?.[index] && (
+              <p className="text-red-500">
+                {errors.questions?.[index]?.question?.message}
+              </p>
+            )}
+            {(answerAmount[field.id] || answerAmount.init).map(
               (val, i: number) => (
-                <div className="flex items-center justify-center" key={i}>
-                  <input
-                    placeholder={`answer ${i + 1}`}
-                    {...register(`questions[${index}].answers[${i}]`, {
-                      required: true,
-                    })}
-                    className="my-1 h-10 w-full pl-1"
-                  />
-                  <input
-                    type="radio"
-                    value={i}
-                    {...register(`questions[${index}].correctAnswer`, {
-                      required: true,
-                    })}
-                  />
-                </div>
+                <>
+                  <div className="flex items-center justify-center" key={i}>
+                    <input
+                      placeholder={`answer ${i + 1}`}
+                      {...register(`questions[${index}].answers[${i}]`, {
+                        required: "Answer is required",
+                      })}
+                      className="my-1 mt-2 h-10 w-full pl-1"
+                    />
+                    <input
+                      type="radio"
+                      value={i}
+                      {...register(`questions[${index}].correctAnswer`, {
+                        required:
+                          "You must select a correct answer for this question",
+                      })}
+                    />
+                  </div>
+                  {errors.questions?.[index] && (
+                    <p className="text-red-500">
+                      {errors.questions?.[index].answers?.[i]?.message}
+                    </p>
+                  )}
+                </>
               )
+            )}
+            {errors.questions?.[index] && (
+              <p className="text-red-500">
+                {errors.questions?.[index].correctAnswer?.message}
+              </p>
             )}
             <div className="flex w-full items-center justify-center">
               {!(answerAmount[field.id]?.length === 4) && (
