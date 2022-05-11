@@ -1,5 +1,5 @@
 // react hook form import
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import React, { useState, useEffect } from "react";
 import { DevTool } from "@hookform/devtools";
 import clsx from "clsx";
@@ -14,13 +14,16 @@ export default function App() {
     control,
     handleSubmit,
     setFocus,
-    formState: { errors },
+    formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
   } = useForm({});
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
   });
-  console.log(errors);
+  console.log("isValid", isValid);
+  console.log("isSubmitting", isSubmitting);
+  console.log("isSubmitSucessful", isSubmitSuccessful);
+
   // in answerAmount we have an array for every field.id we have in the form.
   // answerAmount[field.id] holds an array of undefined values. The length of this array is the amount of answers for that field.
   const [answerAmount, setAnswerAmount] = useState<answerAmountType>({
@@ -91,6 +94,9 @@ export default function App() {
   useEffect(() => {
     setFocus("title");
   }, []);
+  useEffect(() => {
+    console.log(isSubmitting);
+  }, [isValid]);
 
   return (
     <>
@@ -164,11 +170,15 @@ export default function App() {
                       {...register(`questions[${index}].answers[${i}]`, {
                         required: "Answer is required",
                       })}
-                      className="my-1 mt-2 h-10 w-full pl-1"
+                      className={clsx(
+                        "my-1 mt-2 h-10 w-full rounded-sm pl-1",
+                        "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+                      )}
                     />
                     <input
                       type="radio"
                       value={i}
+                      className=""
                       {...register(`questions[${index}].correctAnswer`, {
                         required:
                           "You must select a correct answer for this question",
@@ -225,13 +235,23 @@ export default function App() {
           }}
         />
         <button
-          className="my-1 cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]"
+          className={clsx(
+            "my-1 rounded-sm bg-amber-500 px-4 py-2 text-black transition-colors hover:bg-[#ffad21]",
+            {
+              ["cursor-not-allowed opacity-50 hover:bg-amber-500"]: !isValid,
+              ["cursor-pointer"]: isValid,
+              ["cursor-auto"]: isSubmitting || isSubmitSuccessful,
+            }
+          )}
           type="submit"
+          disabled={!isValid || isSubmitting || isSubmitSuccessful}
           onClick={() => {
-            handleSubmit(onSubmit);
+            if (isValid) {
+              handleSubmit(onSubmit);
+            }
           }}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && isValid) {
               e.preventDefault();
               handleSubmit(onSubmit);
             }
