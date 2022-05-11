@@ -19,6 +19,7 @@ export default function App() {
     formState,
     reset,
     watch,
+    trigger,
   } = useForm({});
   const { fields, append, remove } = useFieldArray({
     control,
@@ -31,7 +32,7 @@ export default function App() {
   });
   const [data, setData] = useState({});
   const questionsArr = watch("questions");
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     // looping over the questions array and adding the correctAnswer as a string
     const formattedQuestions = data.questions.map((obj: any, i: number) => {
       return {
@@ -44,7 +45,7 @@ export default function App() {
       description: data.description,
       questions: formattedQuestions,
     });
-    fetch("/api/newquiz", {
+    await fetch("/api/newquiz", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -66,13 +67,17 @@ export default function App() {
         console.log(
           "data sent to server, should redirect to another component or page now"
         );
-        clearErrors("post");
+        return clearErrors("post");
       })
       .catch((err) => {
-        setError("post", {
-          type: "submit",
-          message: err,
+        reset({
+          title: "",
         });
+        setError("post", {
+          type: "custom",
+          message: "Title already exists. Please choose another title.",
+        });
+        return trigger("title", { shouldFocus: true });
       });
   };
   const handleNewQuestion = (id: string) => {
@@ -128,6 +133,7 @@ export default function App() {
       >
         <input
           placeholder="Title"
+          onInput={() => clearErrors("post")}
           {...register("title", {
             required: "Title is required",
             maxLength: {
