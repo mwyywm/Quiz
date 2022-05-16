@@ -63,7 +63,6 @@ export default function App() {
         return res.json();
       })
       .then((data) => {
-        console.log("data", data);
         console.log(
           "data sent to server, should redirect to another component or page now"
         );
@@ -96,7 +95,6 @@ export default function App() {
       }),
     }));
   };
-
   useEffect(() => {
     // fill answerAmount state with ids when we add a new question
     const fieldIds = () => fields.map((x) => x.id.toString());
@@ -121,6 +119,9 @@ export default function App() {
     }
   }, [questionsArr]);
   useEffect(() => {
+    // appending initial question 1 to the form
+    append({ question: "", answers: [] });
+    // focus form title on component render
     setFocus("title");
   }, []);
   return (
@@ -179,7 +180,7 @@ export default function App() {
           <p className="text-red-500">{formState.errors.description.message}</p>
         )}
         {fields.map((field, index: number) => (
-          <React.Fragment key={index}>
+          <React.Fragment key={field.id}>
             <label className="mt-4 text-lg text-white">
               Question {index + 1}
             </label>
@@ -200,7 +201,7 @@ export default function App() {
             )}
             {(answerAmount[field.id] || answerAmount.init).map(
               (val, i: number) => (
-                <React.Fragment key={i + index}>
+                <React.Fragment key={field.id + i}>
                   <div className="flex items-center justify-center">
                     <input
                       placeholder={`answer ${i + 1}`}
