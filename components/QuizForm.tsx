@@ -126,7 +126,7 @@ export default function App() {
   }, []);
   return (
     <>
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
       <h2 className="mt-4 text-lg text-white">QuizForm</h2>
       <form
         className="flex w-full flex-col text-black"
@@ -150,7 +150,10 @@ export default function App() {
               message: "Title must be alphanumeric.",
             },
           })}
-          className="h-10 w-full pl-1"
+          className={clsx(
+            "mt-1 h-10 w-full rounded-sm pl-1",
+            "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+          )}
           onKeyDown={(e) => {
             e.key === "Enter" && e.preventDefault();
           }}
@@ -171,7 +174,10 @@ export default function App() {
               message: "Description must be 150 characters or less",
             },
           })}
-          className="mt-2 h-10 w-full pl-1"
+          className={clsx(
+            "mt-2 h-10 w-full rounded-sm pl-1",
+            "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+          )}
           onKeyDown={(e) => {
             e.key === "Enter" && e.preventDefault();
           }}
@@ -189,7 +195,10 @@ export default function App() {
               {...register(`questions[${index}].question`, {
                 required: "Question is required",
               })}
-              className="h-10 w-full pl-1"
+              className={clsx(
+                "my-1  h-10 w-full rounded-sm pl-1",
+                "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+              )}
               onKeyDown={(e) => {
                 e.key === "Enter" && e.preventDefault();
               }}
@@ -219,7 +228,8 @@ export default function App() {
                     <input
                       type="radio"
                       value={i}
-                      className=""
+                      style={{ accentColor: "#FFAD21" }}
+                      className={clsx("form-radio mx-2 h-5 w-5 ")}
                       {...register(`questions[${index}].correctAnswer`, {
                         required:
                           "You must select a correct answer for this question",
@@ -245,12 +255,20 @@ export default function App() {
                 {formState.errors.questions?.[index].correctAnswer?.message}
               </p>
             )}
-            <div className="flex w-full items-center justify-center">
+            <div
+              className={clsx(
+                "flex w-full flex-col items-center justify-center",
+                "xs:flex-row"
+              )}
+            >
               {!(answerAmount[field.id]?.length === 4) && (
                 <input
                   value="Add answer"
                   readOnly
-                  className="my-1 mr-1 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]"
+                  className={clsx(
+                    "my-1 mr-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
+                    "xs:mr-1"
+                  )}
                   onClick={() => handleNewQuestion(field.id)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -264,7 +282,8 @@ export default function App() {
                 value={`Remove question ${index + 1}`}
                 readOnly
                 className={clsx(
-                  "my-1 ml-1 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
+                  "my-1 ml-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
+                  "xs:ml-1",
                   {
                     "ml-0": answerAmount[field.id]?.length === 4, // resetting margin left when we only show 1 element
                   }
