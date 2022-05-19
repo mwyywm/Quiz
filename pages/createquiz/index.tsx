@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Layout from "../../components/Layout";
 import QuizForm from "../../components/QuizForm";
-import QuizCreated from "../../components/QuizCreated";
+import dynamic from "next/dynamic";
+const QuizCreated = dynamic(() => import("../../components/QuizCreated"), {
+  ssr: false,
+});
 
 interface sentFormData {
   id: number;
