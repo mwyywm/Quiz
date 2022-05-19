@@ -1,14 +1,16 @@
 // react hook form import
 import { useForm, useFieldArray } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import { DevTool } from "@hookform/devtools";
 import clsx from "clsx";
 interface answerAmountType {
   init: undefined[];
   [key: string]: undefined[] | [undefined];
 }
+interface QuizFormProps {
+  setSentFormData: (data: any) => void;
+}
 
-export default function App() {
+export default function QuizForm({ setSentFormData }: QuizFormProps) {
   const {
     register,
     control,
@@ -63,9 +65,7 @@ export default function App() {
         return res.json();
       })
       .then((data) => {
-        console.log(
-          "data sent to server, should redirect to another component or page now"
-        );
+        setSentFormData(data); // passing the response object to the parent component
         return clearErrors("post");
       })
       .catch((err) => {
@@ -126,8 +126,7 @@ export default function App() {
   }, []);
   return (
     <>
-      {/* <DevTool control={control} /> */}
-      <h2 className="mt-4 text-lg text-white">QuizForm</h2>
+      <h2 className="mt-4 text-lg text-white">New quiz</h2>
       <form
         className="flex w-full flex-col text-black"
         onSubmit={handleSubmit(onSubmit)}

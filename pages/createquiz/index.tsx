@@ -1,7 +1,17 @@
+import { useState } from "react";
 import Layout from "../../components/Layout";
 import QuizForm from "../../components/QuizForm";
+import QuizCreated from "../../components/QuizCreated";
+
+interface sentFormData {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+}
 
 const CreateQuizPage = () => {
+  const [sentFormData, setSentFormData] = useState(null as sentFormData | null);
   return (
     <Layout>
       <section className="mb-24">
@@ -18,8 +28,14 @@ const CreateQuizPage = () => {
         </div>
       </section>
       <section>
-        <div className="mx-auto w-[650px] max-w-full">
-          <QuizForm />
+        {console.log(sentFormData)}
+        <div className="pb mx-auto w-[650px] max-w-full pb-16">
+          {/* {sentFormData ? (
+            <QuizCreated quiz={sentFormData} />
+          ) : (
+            <QuizForm setSentFormData={setSentFormData} />
+          )} */}
+          <QuizCreated />
         </div>
       </section>
     </Layout>
