@@ -50,10 +50,14 @@ const QuizCreated = () => {
       </h3>
 
       <div
-        className="m-auto my-2 flex w-80 max-w-full items-center justify-between bg-white p-1"
+        className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
         onClick={() => copyToClipboard(x.slug)}
       >
-        <input value={x.slug} readOnly className="h-8 focus:outline-none" />
+        <input
+          value={`${window.location.origin}/quiz/${x.slug}`}
+          readOnly
+          className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
+        />
         <Icon />
       </div>
     </div>
