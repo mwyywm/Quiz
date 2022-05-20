@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Popover from "./Popover";
 let x = {
   id: 138,
@@ -41,15 +41,13 @@ function Icon() {
 }
 
 const QuizCreated = () => {
+  const [showPopover, setShowPopover] = useState(false);
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
-  const copyRef = React.useRef(null);
+  const copyRef = useRef(null);
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
-      <Popover element={copyRef}>
-        <p>Copy to clipboard</p>
-      </Popover>
       <h3 className="text-center text-2xl font-bold text-white">
         {x.title} has been created
       </h3>
@@ -57,6 +55,12 @@ const QuizCreated = () => {
         className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
         onClick={() => copyToClipboard(x.slug)}
         ref={copyRef}
+        onMouseEnter={() => {
+          setShowPopover(true);
+        }}
+        onMouseLeave={() => {
+          setShowPopover(false);
+        }}
       >
         <input
           value={`${window.location.origin}/quiz/${x.slug}`}
@@ -65,6 +69,11 @@ const QuizCreated = () => {
         />
         <Icon />
       </div>
+      {showPopover && (
+        <Popover element={copyRef}>
+          <p>Copy to clipboard</p>
+        </Popover>
+      )}
     </div>
   );
 };
