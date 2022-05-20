@@ -22,11 +22,12 @@ const Popover = ({ children, element }: PopoverProps) => {
     setElementRect(element.current.getBoundingClientRect());
     console.log(elementRect);
   }, [element]);
+  if (!elementRect) return null;
   return (
     <div
       className={`absolute rounded-lg border border-gray-300 bg-white text-center shadow-lg`}
       style={{
-        top: elementRect && elementRect?.top - 30,
+        top: element.current && elementRect?.top - 30,
         left: elementRect?.left,
         width: elementRect?.width,
       }}

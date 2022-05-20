@@ -41,11 +41,12 @@ function Icon() {
 }
 
 const QuizCreated = () => {
-  const [showPopover, setShowPopover] = useState(false);
+  const [showPopover, setShowPopover] = useState(null);
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
-  const copyRef = useRef(null);
+  const firstCopyRef = useRef(null);
+  const secondCopyRef = useRef(null);
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
       <h3 className="text-center text-2xl font-bold text-white">
@@ -54,12 +55,32 @@ const QuizCreated = () => {
       <div
         className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
         onClick={() => copyToClipboard(x.slug)}
-        ref={copyRef}
+        ref={firstCopyRef}
         onMouseEnter={() => {
-          setShowPopover(true);
+          setShowPopover(firstCopyRef);
+          console.log(firstCopyRef?.current);
         }}
         onMouseLeave={() => {
-          setShowPopover(false);
+          setShowPopover(null);
+        }}
+      >
+        <input
+          value={`${window.location.origin}/quiz/${x.slug}`}
+          readOnly
+          className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
+        />
+        <Icon />
+      </div>
+      <div
+        className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
+        onClick={() => copyToClipboard(x.slug)}
+        ref={secondCopyRef}
+        onMouseEnter={() => {
+          setShowPopover(secondCopyRef);
+          console.log(secondCopyRef?.current);
+        }}
+        onMouseLeave={() => {
+          setShowPopover(null);
         }}
       >
         <input
@@ -70,7 +91,7 @@ const QuizCreated = () => {
         <Icon />
       </div>
       {showPopover && (
-        <Popover element={copyRef}>
+        <Popover element={showPopover}>
           <p>Copy to clipboard</p>
         </Popover>
       )}
