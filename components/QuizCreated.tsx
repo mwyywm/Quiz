@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import Popover from "./Popover";
 let x = {
   id: 138,
   title: "asfasdfasdfasdf",
@@ -43,15 +44,19 @@ const QuizCreated = () => {
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
+  const copyRef = React.useRef(null);
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
+      <Popover element={copyRef}>
+        <p>Copy to clipboard</p>
+      </Popover>
       <h3 className="text-center text-2xl font-bold text-white">
         {x.title} has been created
       </h3>
-
       <div
         className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
         onClick={() => copyToClipboard(x.slug)}
+        ref={copyRef}
       >
         <input
           value={`${window.location.origin}/quiz/${x.slug}`}
