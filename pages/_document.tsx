@@ -9,6 +9,7 @@ export default function Document() {
       <body className="bg-darkbg font-sans text-white">
         <Main />
         <NextScript />
+        <div id="portal-root"></div>
       </body>
     </Html>
   );

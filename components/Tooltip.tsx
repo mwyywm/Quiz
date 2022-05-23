@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Portal from "./Portal";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -33,16 +34,18 @@ const Tooltip = ({ children, element }: TooltipProps) => {
   console.log(elementRect);
   if (!elementRect) return null;
   return (
-    <div
-      className={`absolute z-10 max-w-full rounded-lg border border-gray-300 bg-white text-center shadow-lg`}
-      style={{
-        top: `${elementRect.top - 30 + window.scrollY}px`,
-        left: `${elementRect?.left + window.scrollX}px`,
-        width: elementRect?.width,
-      }}
-    >
-      {children}
-    </div>
+    <Portal>
+      <div
+        className={`absolute z-10 max-w-full rounded-lg border border-gray-300 bg-white text-center shadow-lg`}
+        style={{
+          top: `${elementRect.top - 30 + window.scrollY}px`,
+          left: `${elementRect?.left + window.scrollX}px`,
+          width: elementRect?.width,
+        }}
+      >
+        {children}
+      </div>
+    </Portal>
   );
 };
 export default Tooltip;
