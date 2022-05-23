@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import Popover from "./Popover";
+import Popover from "./Tooltip";
 let x = {
   id: 138,
   title: "asfasdfasdfasdf",
@@ -41,12 +41,15 @@ function Icon() {
 }
 
 const QuizCreated = () => {
-  const [showPopover, setShowPopover] = useState(null);
+  const [showPopover, setShowPopover] =
+    useState<React.RefObject<HTMLDivElement> | null>(null);
+  const firstCopyRef = useRef(null);
+  const secondCopyRef = useRef(null);
+
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
-  const firstCopyRef = useRef(null);
-  const secondCopyRef = useRef(null);
+
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
       <h3 className="text-center text-2xl font-bold text-white">
@@ -58,7 +61,6 @@ const QuizCreated = () => {
         ref={firstCopyRef}
         onMouseEnter={() => {
           setShowPopover(firstCopyRef);
-          console.log(firstCopyRef?.current);
         }}
         onMouseLeave={() => {
           setShowPopover(null);
@@ -77,7 +79,6 @@ const QuizCreated = () => {
         ref={secondCopyRef}
         onMouseEnter={() => {
           setShowPopover(secondCopyRef);
-          console.log(secondCopyRef?.current);
         }}
         onMouseLeave={() => {
           setShowPopover(null);
@@ -92,7 +93,7 @@ const QuizCreated = () => {
       </div>
       {showPopover && (
         <Popover element={showPopover}>
-          <p>Copy to clipboard</p>
+          <p className="text-m text-gray-800">Copy to clipboard</p>
         </Popover>
       )}
     </div>
