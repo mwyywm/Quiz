@@ -31,12 +31,11 @@ const Tooltip = ({ children, element }: TooltipProps) => {
       window.removeEventListener("resize", () => {});
     };
   }, [element]);
-  console.log(elementRect);
   if (!elementRect) return null;
   return (
     <Portal>
       <div
-        className={`absolute z-10 max-w-full rounded-lg border border-gray-300 bg-white text-center shadow-lg`}
+        className={`} absolute z-10 max-w-full cursor-none rounded-lg border border-gray-300 bg-white text-center shadow-lg `}
         style={{
           top: `${elementRect.top - 30 + window.scrollY}px`,
           left: `${elementRect?.left + window.scrollX}px`,

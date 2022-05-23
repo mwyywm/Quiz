@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import Popover from "./Tooltip";
+import Tooltip from "./Tooltip";
 let x = {
   id: 138,
   title: "asfasdfasdfasdf",
@@ -41,7 +41,7 @@ function Icon() {
 }
 
 const QuizCreated = () => {
-  const [showPopover, setShowPopover] =
+  const [showTooltip, setShowTooltip] =
     useState<React.RefObject<HTMLDivElement> | null>(null);
   const firstCopyRef = useRef(null);
   const secondCopyRef = useRef(null);
@@ -60,10 +60,10 @@ const QuizCreated = () => {
         onClick={() => copyToClipboard(x.slug)}
         ref={firstCopyRef}
         onMouseEnter={() => {
-          setShowPopover(firstCopyRef);
+          setShowTooltip(firstCopyRef);
         }}
         onMouseLeave={() => {
-          setShowPopover(null);
+          setShowTooltip(null);
         }}
       >
         <input
@@ -78,10 +78,10 @@ const QuizCreated = () => {
         onClick={() => copyToClipboard(x.slug)}
         ref={secondCopyRef}
         onMouseEnter={() => {
-          setShowPopover(secondCopyRef);
+          setShowTooltip(secondCopyRef);
         }}
         onMouseLeave={() => {
-          setShowPopover(null);
+          setShowTooltip(null);
         }}
       >
         <input
@@ -91,10 +91,10 @@ const QuizCreated = () => {
         />
         <Icon />
       </div>
-      {showPopover && (
-        <Popover element={showPopover}>
+      {showTooltip && (
+        <Tooltip element={showTooltip}>
           <p className="text-m text-gray-800">Copy to clipboard</p>
-        </Popover>
+        </Tooltip>
       )}
     </div>
   );
