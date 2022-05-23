@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import Tooltip from "./Tooltip";
 let x = {
   id: 138,
   title: "asfasdfasdfasdf",
@@ -40,18 +41,30 @@ function Icon() {
 }
 
 const QuizCreated = () => {
+  const [showTooltip, setShowTooltip] =
+    useState<React.RefObject<HTMLDivElement> | null>(null);
+  const firstCopyRef = useRef(null);
+  const secondCopyRef = useRef(null);
+
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
+
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
       <h3 className="text-center text-2xl font-bold text-white">
         {x.title} has been created
       </h3>
-
       <div
         className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
         onClick={() => copyToClipboard(x.slug)}
+        ref={firstCopyRef}
+        onMouseEnter={() => {
+          setShowTooltip(firstCopyRef);
+        }}
+        onMouseLeave={() => {
+          setShowTooltip(null);
+        }}
       >
         <input
           value={`${window.location.origin}/quiz/${x.slug}`}
@@ -60,6 +73,29 @@ const QuizCreated = () => {
         />
         <Icon />
       </div>
+      <div
+        className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
+        onClick={() => copyToClipboard(x.slug)}
+        ref={secondCopyRef}
+        onMouseEnter={() => {
+          setShowTooltip(secondCopyRef);
+        }}
+        onMouseLeave={() => {
+          setShowTooltip(null);
+        }}
+      >
+        <input
+          value={`${window.location.origin}/quiz/${x.slug}`}
+          readOnly
+          className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
+        />
+        <Icon />
+      </div>
+      {showTooltip && (
+        <Tooltip element={showTooltip}>
+          <p className="text-m text-gray-800">Copy to clipboard</p>
+        </Tooltip>
+      )}
     </div>
   );
 };
