@@ -42,7 +42,7 @@ function Icon() {
 
 const QuizCreated = () => {
   const firstCopyRef = useRef(null);
-  const secondCopyRef = React.createRef<HTMLDivElement>();
+  const secondCopyRef = useRef(null);
 
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
@@ -53,7 +53,7 @@ const QuizCreated = () => {
       <h3 className="text-center text-2xl font-bold text-white">
         {x.title} has been created
       </h3>
-      <Tooltip ref={firstCopyRef}>
+      <Tooltip ref={firstCopyRef} text="Copy to clipboard">
         <div
           className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
           onClick={() => copyToClipboard(x.slug)}
@@ -67,7 +67,7 @@ const QuizCreated = () => {
           <Icon />
         </div>
       </Tooltip>
-      <Tooltip ref={secondCopyRef}>
+      <Tooltip ref={secondCopyRef} text="Copy to clipboard">
         <div
           className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
           onClick={() => copyToClipboard(x.slug)}

@@ -3,6 +3,8 @@ import Portal from "./Portal";
 
 interface TooltipProps {
   children: React.ReactNode;
+  text: string;
+  clickedText?: string;
   element?: any;
 }
 
@@ -16,11 +18,19 @@ interface ElementRectTypes {
 }
 
 const Tooltip = forwardRef(
-  ({ children }: TooltipProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+  (
+    {
+      children,
+      text = "Copy to clipboard",
+      clickedText = "Copied!",
+    }: TooltipProps,
+    ref: React.ForwardedRef<HTMLDivElement>
+  ) => {
     const [elementRect, setElementRect] = useState<
       ElementRectTypes | undefined
     >(undefined); // elementRect is a DOMRect
     const [show, setShow] = useState(false);
+    const [clicked, setClicked] = useState(false);
     useEffect(() => {
       if (ref && "current" in ref && ref.current) {
         setElementRect(ref.current.getBoundingClientRect());
@@ -42,6 +52,7 @@ const Tooltip = forwardRef(
         <div
           onMouseEnter={() => setShow(true)}
           onMouseLeave={() => setShow(false)}
+          onClick={() => setClicked(true)}
           className="m-auto w-80"
         >
           {children}
@@ -58,7 +69,9 @@ const Tooltip = forwardRef(
                 }
               }
             >
-              <p className="text-m text-gray-800">Copy to clipboard</p>
+              <p className="text-m text-gray-800">
+                {clicked && clickedText ? clickedText : text}
+              </p>
             </div>
           </Portal>
         )}
