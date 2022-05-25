@@ -10,6 +10,18 @@ interface QuizFormProps {
   setSentFormData: (data: any) => void;
 }
 
+interface DataTypes {
+  title: string;
+  description: string;
+  questions: QuestionsType[];
+}
+
+interface QuestionsType {
+  question: string;
+  correctAnswer: string;
+  answers: string[];
+}
+
 export default function QuizForm({ setSentFormData }: QuizFormProps) {
   const {
     register,
@@ -36,12 +48,14 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
   const questionsArr = watch("questions");
   const onSubmit = async (data: any) => {
     // looping over the questions array and adding the correctAnswer as a string
-    const formattedQuestions = data.questions.map((obj: any, i: number) => {
-      return {
-        ...obj,
-        correctAnswer: data.questions[i].answers[Number(obj.correctAnswer)],
-      };
-    });
+    const formattedQuestions = data.questions.map(
+      (obj: QuestionsType, i: number) => {
+        return {
+          ...obj,
+          correctAnswer: data.questions[i].answers[Number(obj.correctAnswer)],
+        };
+      }
+    );
     setData({
       title: data.title,
       description: data.description,
@@ -64,7 +78,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
         }
         return res.json();
       })
-      .then((data) => {
+      .then((data: DataTypes) => {
         setSentFormData(data); // passing the response object to the parent component
         return clearErrors("post");
       })

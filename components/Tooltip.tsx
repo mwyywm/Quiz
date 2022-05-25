@@ -5,7 +5,6 @@ interface TooltipProps {
   children: React.ReactNode;
   text: string;
   clickedText?: string;
-  element?: any;
 }
 
 interface ElementRectTypes {
@@ -52,6 +51,8 @@ const Tooltip = forwardRef(
         <div
           onMouseEnter={() => setShow(true)}
           onMouseLeave={() => setShow(false)}
+          onFocus={() => setShow(true)}
+          onBlur={() => setShow(false)}
           onClick={() => setClicked(true)}
           className="m-auto w-80"
         >
@@ -61,6 +62,7 @@ const Tooltip = forwardRef(
           <Portal>
             <div
               className={`absolute z-10 max-w-full cursor-none rounded-lg border border-gray-300 bg-white text-center shadow-lg `}
+              role="tooltip"
               style={
                 elementRect && {
                   top: `${elementRect?.top - 30 + window.scrollY}px`,

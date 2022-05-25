@@ -6,7 +6,7 @@ const QuizCreated = dynamic(() => import("../../components/QuizCreated"), {
   ssr: false,
 });
 
-interface sentFormData {
+export interface sentFormData {
   id: number;
   title: string;
   slug: string;
@@ -31,7 +31,6 @@ const CreateQuizPage = () => {
         </div>
       </section>
       <section>
-        {console.log(sentFormData)}
         <div className="pb mx-auto w-[650px] max-w-full pb-16">
           {/* {sentFormData ? (
             <QuizCreated quiz={sentFormData} />
