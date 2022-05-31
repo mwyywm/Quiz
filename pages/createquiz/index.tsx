@@ -6,7 +6,7 @@ const QuizCreated = dynamic(() => import("../../components/QuizCreated"), {
   ssr: false,
 });
 
-export interface sentFormData {
+export interface SentFormData {
   id: number;
   title: string;
   slug: string;
@@ -14,7 +14,7 @@ export interface sentFormData {
 }
 
 const CreateQuizPage = () => {
-  const [sentFormData, setSentFormData] = useState(null as sentFormData | null);
+  const [sentFormData, setSentFormData] = useState(null as SentFormData | null);
   return (
     <Layout>
       <section className="mb-24">
@@ -32,12 +32,11 @@ const CreateQuizPage = () => {
       </section>
       <section>
         <div className="pb mx-auto w-[650px] max-w-full pb-16">
-          {/* {sentFormData ? (
+          {sentFormData ? (
             <QuizCreated quiz={sentFormData} />
           ) : (
             <QuizForm setSentFormData={setSentFormData} />
-          )} */}
-          <QuizCreated />
+          )}
         </div>
       </section>
     </Layout>

@@ -1,11 +1,6 @@
 import React, { useRef } from "react";
 import Tooltip from "./Tooltip";
-let x = {
-  id: 138,
-  title: "asfasdfasdfasdf",
-  slug: "asfasdfasdfasdf",
-  description: "asdfsadfasdfsadf",
-};
+
 function Icon() {
   return (
     <svg
@@ -39,8 +34,7 @@ function Icon() {
     </svg>
   );
 }
-
-const QuizCreated = () => {
+const QuizCreated = (quiz: any) => {
   const firstCopyRef = useRef(null);
   const secondCopyRef = useRef(null);
 
@@ -51,16 +45,16 @@ const QuizCreated = () => {
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
       <h3 className="text-center text-2xl font-bold text-white">
-        {x.title} has been created
+        {quiz.quiz.title} has been created
       </h3>
       <Tooltip ref={firstCopyRef} text="Copy to clipboard">
         <div
           className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-          onClick={() => copyToClipboard(x.slug)}
+          onClick={() => copyToClipboard(quiz.quiz.slug)}
           ref={firstCopyRef}
         >
           <input
-            value={`${window.location.origin}/quiz/${x.slug}`}
+            value={`${window.location.origin}/quiz/${quiz.quiz.slug}`}
             readOnly
             className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
           />
@@ -70,11 +64,11 @@ const QuizCreated = () => {
       <Tooltip ref={secondCopyRef} text="Copy to clipboard">
         <div
           className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-          onClick={() => copyToClipboard(x.slug)}
+          onClick={() => copyToClipboard(quiz.quiz.slug)}
           ref={secondCopyRef}
         >
           <input
-            value={`${window.location.origin}/quiz/${x.slug}`}
+            value={`${window.location.origin}/quiz/${quiz.quiz.slug}`}
             readOnly
             className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
           />
