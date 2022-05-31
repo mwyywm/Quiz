@@ -1,4 +1,5 @@
 import Layout from "../../components/Layout";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
 
@@ -10,18 +11,48 @@ interface QuizType {
   title: string;
   slug: string;
   description: string;
-  questions: {
-    id: number;
-    question: string;
-    answers: string[];
-    correctAnswer?: string;
-  };
+  questions: QuestionType[];
+}
+interface QuestionType {
+  id: number;
+  question: string;
+  answers: string[];
+  correctAnswer?: string;
 }
 
+interface AnswerState {
+  name: string;
+  slug: string;
+  quizID: number;
+  questions: {
+    [key: number]: string;
+  };
+}
 const Quiz = ({ quiz }: Props) => {
+  const [answersObj, setAnswersObj] = useState<AnswerState>({} as AnswerState);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    question: QuestionType
+  ) => {
+    setAnswersObj({
+      ...answersObj,
+      questions: {
+        ...answersObj.questions,
+        [question.id]: e.target.value,
+      },
+    });
+    console.log("answersObj", answersObj);
+  };
+  useEffect(() => {
+    setAnswersObj({
+      name: quiz.title,
+      slug: quiz.slug,
+      quizID: quiz.id,
+      questions: {},
+    });
+  }, []);
   return (
     <Layout>
-      {console.log(quiz)}
       <div className="mx-auto w-[650px] max-w-full">
         <h1 className="mb-4 text-center text-5xl font-bold antialiased">
           {quiz.title}
@@ -29,7 +60,27 @@ const Quiz = ({ quiz }: Props) => {
         <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
           {quiz.description}
         </p>
-        <div>{/* quiz taking component goes here */}</div>
+        <div>
+          <ul>
+            {quiz.questions.map((question: QuestionType) => (
+              <li key={question.id}>
+                <p className="text-xl font-bold antialiased">
+                  {question.question}
+                </p>
+                <select
+                  className="text-black"
+                  onChange={(e) => handleChange(e, question)}
+                >
+                  {question.answers.map((answer: string) => (
+                    <option className="text-black" key={answer}>
+                      {answer}
+                    </option>
+                  ))}
+                </select>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </Layout>
   );
