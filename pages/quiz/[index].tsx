@@ -35,17 +35,17 @@ const Quiz = ({ quiz }: Props) => {
     quizID: quiz.id,
     questions: {},
   } as AnswerState);
-  const [currentQuestionID, setCurrentQuestionID] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   // the total amount of questions should be quiz.questions.length - 1.
 
   const handleNextQuestion = () => {
     // if current question is answered && current question is not the last question
     if (
-      Object.entries(answersObj.questions).length === currentQuestionID + 1 &&
-      currentQuestionID < quiz.questions.length - 1
+      Object.entries(answersObj.questions).length === currentQuestion + 1 &&
+      currentQuestion < quiz.questions.length - 1
     ) {
-      setCurrentQuestionID(currentQuestionID + 1);
-    } else if (currentQuestionID === quiz.questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else if (currentQuestion === quiz.questions.length - 1) {
       // if we are on the last question
       console.log("Quiz is over we should submit here!");
       console.log("answersObj: ", answersObj);
@@ -72,17 +72,17 @@ const Quiz = ({ quiz }: Props) => {
         {/* the current question prev/next component below */}
         <div className="mt-5 flex">
           <h2 className="text-left">
-            {quiz.questions[currentQuestionID]?.question}
+            {quiz.questions[currentQuestion]?.question}
           </h2>
           <div>
-            {quiz.questions[currentQuestionID]?.answers.map((answer) => (
+            {quiz.questions[currentQuestion]?.answers.map((answer) => (
               <button
                 key={answer}
                 className="mx-4 bg-gray-600 p-2"
                 onClick={() =>
                   handleAnswer(
                     answer,
-                    Number(quiz.questions[currentQuestionID]?.id)
+                    Number(quiz.questions[currentQuestion]?.id)
                   )
                 }
               >
