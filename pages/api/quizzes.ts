@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
 
+// api/quizzes GET ALL Quizzes
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
