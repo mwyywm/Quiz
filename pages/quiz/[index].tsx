@@ -27,6 +27,7 @@ interface AnswerState {
     [key: number]: string;
   };
 }
+
 const Quiz = ({ quiz }: Props) => {
   const [answersObj, setAnswersObj] = useState<AnswerState>({
     title: quiz.title,
@@ -36,17 +37,28 @@ const Quiz = ({ quiz }: Props) => {
   } as AnswerState);
   const [currentQuestionID, setCurrentQuestionID] = useState(0);
   // the total amount of questions should be quiz.questions.length - 1.
-  console.log(quiz.questions[currentQuestionID]);
+
   const handleNextQuestion = () => {
-    if (currentQuestionID < quiz.questions.length - 1) {
+    // if current question is answered && current question is not the last question
+    if (
+      Object.entries(answersObj.questions).length === currentQuestionID + 1 &&
+      currentQuestionID < quiz.questions.length - 1
+    ) {
       setCurrentQuestionID(currentQuestionID + 1);
-    } else {
-      // handle submit
+    } else if (currentQuestionID === quiz.questions.length - 1) {
+      // if we are on the last question
+      console.log("Quiz is over we should submit here!");
+      console.log("answersObj: ", answersObj);
     }
   };
-  const handleAnswer = (answer: string) => {
-    // handle answer
-    console.log(answer);
+  const handleAnswer = (answer: string, questionID: number) => {
+    setAnswersObj({
+      ...answersObj,
+      questions: {
+        ...answersObj.questions,
+        [questionID]: answer,
+      },
+    });
   };
   return (
     <Layout>
@@ -65,8 +77,14 @@ const Quiz = ({ quiz }: Props) => {
           <div>
             {quiz.questions[currentQuestionID]?.answers.map((answer) => (
               <button
+                key={answer}
                 className="mx-4 bg-gray-600 p-2"
-                onClick={() => handleAnswer(answer)}
+                onClick={() =>
+                  handleAnswer(
+                    answer,
+                    Number(quiz.questions[currentQuestionID]?.id)
+                  )
+                }
               >
                 {answer}
               </button>
