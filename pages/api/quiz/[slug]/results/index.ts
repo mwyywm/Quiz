@@ -15,6 +15,7 @@ export default async function handle(
       title: true,
       results: {
         select: {
+          username: true,
           id: true,
           score: true,
           total: true,

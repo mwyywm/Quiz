@@ -28,7 +28,7 @@ export default async function handle(
     return res.json(result);
   } else if (req.method === "POST") {
     // TODO: Implement POST answers.
-    const { questions, quizID } = req.body;
+    const { questions, quizID, username } = req.body;
     const resultGET = await prisma.quiz.findUnique({
       where: {
         slug: slug as string,
@@ -63,6 +63,7 @@ export default async function handle(
             id: quizID,
           },
         },
+        username: username,
         score: score,
         correct: correctAnswers,
         total: Number(totalAnswers),
