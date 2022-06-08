@@ -2,6 +2,7 @@ import Layout from "../../components/Layout";
 import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
+import clsx from "clsx";
 
 export interface Props {
   quiz: QuizType;
@@ -21,7 +22,7 @@ interface QuestionType {
 }
 
 interface AnswerState {
-  name: string;
+  title: string;
   slug: string;
   quizID: number;
   questions: {
@@ -45,7 +46,7 @@ const Quiz = ({ quiz }: Props) => {
   };
   useEffect(() => {
     setAnswersObj({
-      name: quiz.title,
+      title: quiz.title,
       slug: quiz.slug,
       quizID: quiz.id,
       questions: {},
@@ -81,6 +82,14 @@ const Quiz = ({ quiz }: Props) => {
             ))}
           </ul>
         </div>
+        <button
+          className="rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={() => {
+            console.log(answersObj);
+          }}
+        >
+          send
+        </button>
       </div>
     </Layout>
   );

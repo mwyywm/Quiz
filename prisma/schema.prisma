@@ -15,6 +15,7 @@ model Quiz {
   slug        String     @unique
   description String
   questions   Question[]
+  results     Result[]
 }
 
 model Question {
@@ -24,5 +25,15 @@ model Question {
   question      String   
   correctAnswer String
   answers       String[]
+}
+
+model Result {
+  id          Int      @id @default(autoincrement())
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  quizId      Int
+  username    String
+  score       Float
+  correct     Int
+  total       Int
 }
 
