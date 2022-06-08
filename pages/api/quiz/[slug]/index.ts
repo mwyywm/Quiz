@@ -1,8 +1,10 @@
-import assert from "assert";
 import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function handle(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { slug } = req.query;
   if (req.method === "GET") {
     const result = await prisma.quiz.findUnique({
@@ -26,7 +28,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return res.json(result);
   } else if (req.method === "POST") {
     // TODO: Implement POST answers.
-    const { questions } = req.body;
+    const { questions, quizID } = req.body;
     const resultGET = await prisma.quiz.findUnique({
       where: {
         slug: slug as string,
@@ -54,10 +56,19 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    return res.json({
-      score: score,
-      correct: correctAnswers,
-      total: totalAnswers,
+    const resultPOST = await prisma.result.create({
+      data: {
+        quiz: {
+          connect: {
+            id: quizID,
+          },
+        },
+        score: score,
+        correct: correctAnswers,
+        total: Number(totalAnswers),
+      },
     });
+
+    return res.json(resultPOST);
   }
 }
