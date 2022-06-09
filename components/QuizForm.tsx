@@ -299,7 +299,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                   "my-1 ml-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
                   "xs:ml-1",
                   {
-                    "ml-0": answerAmount[field.id]?.length === 4, // resetting margin left when we only show 1 element
+                    "xs:ml-0": answerAmount[field.id]?.length === 4, // reset margin left when we only show 1 button
                   }
                 )}
                 onClick={() => remove(index)}
