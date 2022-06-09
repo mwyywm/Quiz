@@ -1,25 +1,24 @@
 import Layout from "../../components/Layout";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
+import SubmittingQuiz from "../../components/SubmittingQuiz";
+import clsx from "clsx";
 
-export interface Props {
-  quiz: QuizType;
-}
-interface QuizType {
+export interface QuizType {
   id: number;
   title: string;
   slug: string;
   description: string;
   questions: QuestionType[];
 }
-interface QuestionType {
+export interface QuestionType {
   id: number;
   question: string;
   answers: string[];
   correctAnswer?: string;
 }
-interface AnswerObjState {
+export interface AnswersObjState {
   title: string;
   slug: string;
   quizID: number;
@@ -27,19 +26,19 @@ interface AnswerObjState {
     [key: number]: string;
   };
 }
+interface Props {
+  quiz: QuizType;
+}
 
 const Quiz = ({ quiz }: Props) => {
-  const [answersObj, setAnswersObj] = useState<AnswerObjState>({
+  const [answersObj, setAnswersObj] = useState<AnswersObjState>({
     title: quiz.title,
     slug: quiz.slug,
     quizID: quiz.id,
     questions: {},
-  } as AnswerObjState);
+  } as AnswersObjState);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSubmitComponent, setShowSubmitComponent] = useState(false);
-
-  const usernameRef = useRef<HTMLInputElement>(null);
-  // the total amount of questions should be quiz.questions.length - 1.
 
   const handleNextQuestion = () => {
     // if current question is answered && current question is not the last question
@@ -62,42 +61,8 @@ const Quiz = ({ quiz }: Props) => {
       },
     });
   };
-  const submitQuizAnswers = async () => {
-    console.log(usernameRef.current?.value);
-    // "username", "quizID", "questions"
-    console.log({ ...answersObj, username: usernameRef.current?.value });
-  };
-  console.log(currentQuestion);
   if (showSubmitComponent) {
-    // TODO: Make this into a component later.
-    return (
-      <Layout>
-        <div className="mx-auto w-[650px] max-w-full">
-          <h1 className="mb-4 text-center text-5xl font-bold antialiased">
-            {quiz.title}
-          </h1>
-          <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
-            To see your final score please write your username and then submit.
-            Your username and score can be viewed by anyone.
-          </p>
-          <div className="mt-5 flex">
-            <input
-              ref={usernameRef}
-              className="text-black"
-              placeholder="username"
-              type="text"
-              required
-            />
-          </div>
-          <button
-            className="rounded-md bg-blue-400 p-2 font-semibold text-black"
-            onClick={submitQuizAnswers}
-          >
-            Submit
-          </button>
-        </div>
-      </Layout>
-    );
+    return <SubmittingQuiz quiz={quiz} answersObj={answersObj} />;
   }
   return (
     <Layout>
@@ -108,16 +73,16 @@ const Quiz = ({ quiz }: Props) => {
         <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
           {quiz.description}
         </p>
-        {/* the current question prev/next component below */}
-        <div className="mt-5 flex">
+        <div className="mt-5 flex flex-col justify-center bg-gray-500">
           <h2 className="text-left">
             {quiz.questions[currentQuestion]?.question}
           </h2>
-          <div>
+          {console.log(quiz.questions[currentQuestion]?.answers.length)}
+          <div className={clsx("grid max-w-full gap-2 bg-red-400")}>
             {quiz.questions[currentQuestion]?.answers.map((answer) => (
               <button
                 key={answer}
-                className="mx-4 bg-gray-600 p-2"
+                className="min-h-[60px] w-full max-w-full break-all rounded-sm bg-white py-2 text-black"
                 onClick={() =>
                   handleAnswer(
                     answer,
@@ -130,7 +95,6 @@ const Quiz = ({ quiz }: Props) => {
             ))}
           </div>
         </div>
-        {/* the current question prev/next component above */}
         <button
           className="rounded-md bg-blue-400 p-2 font-semibold text-black"
           onClick={handleNextQuestion}
