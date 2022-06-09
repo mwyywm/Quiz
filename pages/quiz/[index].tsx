@@ -1,5 +1,5 @@
 import Layout from "../../components/Layout";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
 
@@ -19,7 +19,7 @@ interface QuestionType {
   answers: string[];
   correctAnswer?: string;
 }
-interface AnswerState {
+interface AnswerObjState {
   title: string;
   slug: string;
   quizID: number;
@@ -29,13 +29,16 @@ interface AnswerState {
 }
 
 const Quiz = ({ quiz }: Props) => {
-  const [answersObj, setAnswersObj] = useState<AnswerState>({
+  const [answersObj, setAnswersObj] = useState<AnswerObjState>({
     title: quiz.title,
     slug: quiz.slug,
     quizID: quiz.id,
     questions: {},
-  } as AnswerState);
+  } as AnswerObjState);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showSubmitComponent, setShowSubmitComponent] = useState(false);
+
+  const usernameRef = useRef<HTMLInputElement>(null);
   // the total amount of questions should be quiz.questions.length - 1.
 
   const handleNextQuestion = () => {
@@ -46,9 +49,8 @@ const Quiz = ({ quiz }: Props) => {
     ) {
       setCurrentQuestion(currentQuestion + 1);
     } else if (currentQuestion === quiz.questions.length - 1) {
-      // if we are on the last question
-      console.log("Quiz is over we should submit here!");
-      console.log("answersObj: ", answersObj);
+      // if we are on the last question we show the submit component
+      setShowSubmitComponent(true);
     }
   };
   const handleAnswer = (answer: string, questionID: number) => {
@@ -60,6 +62,43 @@ const Quiz = ({ quiz }: Props) => {
       },
     });
   };
+  const submitQuizAnswers = async () => {
+    console.log(usernameRef.current?.value);
+    // "username", "quizID", "questions"
+    console.log({ ...answersObj, username: usernameRef.current?.value });
+  };
+  console.log(currentQuestion);
+  if (showSubmitComponent) {
+    // TODO: Make this into a component later.
+    return (
+      <Layout>
+        <div className="mx-auto w-[650px] max-w-full">
+          <h1 className="mb-4 text-center text-5xl font-bold antialiased">
+            {quiz.title}
+          </h1>
+          <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
+            To see your final score please write your username and then submit.
+            Your username and score can be viewed by anyone.
+          </p>
+          <div className="mt-5 flex">
+            <input
+              ref={usernameRef}
+              className="text-black"
+              placeholder="username"
+              type="text"
+              required
+            />
+          </div>
+          <button
+            className="rounded-md bg-blue-400 p-2 font-semibold text-black"
+            onClick={submitQuizAnswers}
+          >
+            Submit
+          </button>
+        </div>
+      </Layout>
+    );
+  }
   return (
     <Layout>
       <div className="mx-auto w-[650px] max-w-full">
