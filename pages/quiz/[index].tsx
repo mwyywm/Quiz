@@ -77,8 +77,14 @@ const Quiz = ({ quiz }: Props) => {
           <h2 className="text-left">
             {quiz.questions[currentQuestion]?.question}
           </h2>
-          {console.log(quiz.questions[currentQuestion]?.answers.length)}
-          <div className={clsx("grid max-w-full gap-2 bg-red-400")}>
+          <div
+            className={clsx(
+              "grid max-w-full gap-2 bg-red-400",
+              quiz.questions[currentQuestion]?.answers.length === 4
+                ? "grid-cols-2"
+                : "grid-cols-1"
+            )}
+          >
             {quiz.questions[currentQuestion]?.answers.map((answer) => (
               <button
                 key={answer}
