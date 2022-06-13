@@ -20,17 +20,18 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<Inputs>();
-
+  console.log(quiz.id);
   const onSubmit: SubmitHandler<Inputs> = async (data, e) => {
     const { username } = data;
+    console.log("lol", { ...answersObj, username });
     await fetch(`/api/quiz/${quiz.slug}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json, charset=utf-8",
+        "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify({ ...answersObj, username }),
     }).then((res) => {
-      if (res.status === 200) {
+      if (res.ok) {
         alert("Submitted!");
         // TODO: redirect to quiz results page
       } else {
