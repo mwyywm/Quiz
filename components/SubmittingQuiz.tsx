@@ -1,6 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import Layout from "./Layout";
 import { QuizType, AnswersObjState } from "../pages/quiz/[index]";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 import clsx from "clsx";
 
 interface Props {
@@ -8,14 +10,23 @@ interface Props {
   answersObj: AnswersObjState;
 }
 
-const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
-  const usernameRef = useRef<HTMLInputElement>(null);
+type Inputs = {
+  username: string;
+};
 
-  const submitQuizAnswers = async () => {
+const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data, e) => {
+    console.log(data);
+    console.log({ ...answersObj });
     // TODO: this is what we will eventually send to the server
     // TODO: After sending the quiz answers to the server, redirect to the quiz results page
-
-    console.log({ ...answersObj, username: usernameRef.current?.value });
   };
 
   return (
@@ -28,31 +39,47 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
           To see your final score please write your username and then submit.
           Your username and score can be viewed by anyone.
         </p>
-        <div className="mb-5 flex">
-          <input
-            ref={usernameRef}
-            className={clsx(
-              "m-auto w-full rounded-sm p-2 text-black sm:w-60 sm:rounded-sm",
-              "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+        <form className="mb-5 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <div className="m-auto h-20 w-full sm:w-60">
+            <input
+              className={clsx(
+                "mb-2 w-full rounded-sm p-2 text-black sm:rounded-sm",
+                "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+              )}
+              {...register("username", {
+                required: {
+                  value: true,
+                  message: "Please enter a username",
+                },
+                minLength: {
+                  value: 3,
+                  message: "Username must be at least 3 characters",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Username must be at most 20 characters",
+                },
+              })}
+            />
+            {errors.username && (
+              <p className="w-full text-sm text-red-500">
+                {errors.username.message}
+              </p>
             )}
-            placeholder="username"
-            type="text"
-            required
-          />
-          {/* Could use react-hook-form to handle errors in the form */}
-        </div>
-        <div className="flex justify-end">
-          <button
-            className={clsx(
-              "h-16 w-32 rounded-md bg-white p-2 text-lg font-normal text-black transition-colors duration-200 ease-in-out",
-              "hover:bg-gray-300 disabled:bg-gray-300"
-            )}
-            onClick={submitQuizAnswers}
-            disabled={!usernameRef.current?.value}
-          >
-            Submit
-          </button>
-        </div>
+          </div>
+          <div className="mt-5 flex justify-end">
+            <button
+              type="submit"
+              className={clsx(
+                "h-16 w-32 rounded-md bg-white p-2 text-lg font-normal text-black transition-colors duration-200 ease-in-out",
+                "hover:bg-gray-300 disabled:bg-gray-300"
+              )}
+            >
+              Submit
+            </button>
+          </div>
+          <DevTool control={control} />
+        </form>
       </div>
     </Layout>
   );
