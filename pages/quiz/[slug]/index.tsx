@@ -21,7 +21,7 @@ export interface QuestionType {
 export interface AnswersObjState {
   title: string;
   slug: string;
-  quizID: number;
+  quizId: number;
   questions: {
     [key: number]: string;
   };
@@ -34,7 +34,7 @@ const Quiz = ({ quiz }: Props) => {
   const [answersObj, setAnswersObj] = useState<AnswersObjState>({
     title: quiz.title,
     slug: quiz.slug,
-    quizID: quiz.id,
+    quizId: quiz.id,
     questions: {},
   } as AnswersObjState);
   const [currentQuestion, setCurrentQuestion] = useState(0);
