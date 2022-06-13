@@ -39,9 +39,11 @@ const Quiz = ({ quiz }: Props) => {
   } as AnswersObjState);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSubmitComponent, setShowSubmitComponent] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const handleNextQuestion = () => {
     // if current question is answered && current question is not the last question
+    setSelectedAnswer("");
     if (
       Object.entries(answersObj.questions).length === currentQuestion + 1 &&
       currentQuestion < quiz.questions.length - 1
@@ -53,6 +55,7 @@ const Quiz = ({ quiz }: Props) => {
     }
   };
   const handleAnswer = (answer: string, questionID: number) => {
+    setSelectedAnswer(answer);
     setAnswersObj({
       ...answersObj,
       questions: {
@@ -67,28 +70,38 @@ const Quiz = ({ quiz }: Props) => {
   return (
     <Layout>
       <div className="mx-auto w-[650px] max-w-full">
-        <h1 className="mb-4 text-center text-5xl font-bold antialiased">
+        <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
           {quiz.title}
         </h1>
-        <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
+        <p className="mx-auto mt-5 w-[550px] max-w-full break-words text-center text-xl font-normal text-gray-300 antialiased">
           {quiz.description}
         </p>
-        <div className="mt-5 flex flex-col justify-center bg-gray-500">
-          <h2 className="text-left">
-            {quiz.questions[currentQuestion]?.question}
-          </h2>
+        <div className="mt-5 flex flex-col justify-center">
+          <div className="mb-4 min-h-[100px]">
+            <h2 className="text-all break-words text-2xl font-normal antialiased">
+              {quiz.questions[currentQuestion]?.question} What is the name of
+              the second pokemon in the first movie?
+            </h2>
+          </div>
           <div
             className={clsx(
-              "grid max-w-full gap-2 bg-red-400",
+              "mb-4 grid max-w-full grid-cols-1 gap-1.5",
               quiz.questions[currentQuestion]?.answers.length === 4
-                ? "grid-cols-2"
-                : "grid-cols-1"
+                ? "sm:grid-cols-2"
+                : "sm:grid-cols-1"
             )}
           >
             {quiz.questions[currentQuestion]?.answers.map((answer) => (
               <button
                 key={answer}
-                className="min-h-[60px] w-full max-w-full break-all rounded-sm bg-white py-2 text-black"
+                className={clsx(
+                  "min-h-[60px] w-full max-w-full break-all rounded-sm bg-white p-2 text-lg text-black",
+                  "dura transition-colors duration-200 ease-in-out",
+                  {
+                    "bg-[#ffad21]": selectedAnswer === answer,
+                    "hover:bg-gray-300": selectedAnswer !== answer,
+                  }
+                )}
                 onClick={() =>
                   handleAnswer(
                     answer,
@@ -101,12 +114,18 @@ const Quiz = ({ quiz }: Props) => {
             ))}
           </div>
         </div>
-        <button
-          className="rounded-md bg-blue-400 p-2 font-semibold text-black"
-          onClick={handleNextQuestion}
-        >
-          next
-        </button>
+        <div className="flex justify-end">
+          <button
+            className={clsx(
+              "h-16 w-32 rounded-md bg-white p-2 text-lg font-normal text-black transition-colors duration-200 ease-in-out",
+              "hover:bg-gray-300 disabled:bg-gray-300"
+            )}
+            onClick={handleNextQuestion}
+            disabled={selectedAnswer === ""}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </Layout>
   );
