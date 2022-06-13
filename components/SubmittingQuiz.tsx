@@ -2,8 +2,8 @@ import React from "react";
 import Layout from "./Layout";
 import { QuizType, AnswersObjState } from "../pages/quiz/[index]";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import clsx from "clsx";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface Props {
   quiz: QuizType;
@@ -18,15 +18,26 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    control,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data, e) => {
-    console.log(data);
-    console.log({ ...answersObj });
-    // TODO: this is what we will eventually send to the server
-    // TODO: After sending the quiz answers to the server, redirect to the quiz results page
+    const { username } = data;
+    await fetch(`/api/quiz/${quiz.slug}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json, charset=utf-8",
+      },
+      body: JSON.stringify({ ...answersObj, username }),
+    }).then((res) => {
+      if (res.status === 200) {
+        alert("Submitted!");
+        // TODO: redirect to quiz results page
+      } else {
+        // TODO: handle error
+        alert("Error submitting!");
+      }
+    });
   };
 
   return (
@@ -46,6 +57,7 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
                 "mb-2 w-full rounded-sm p-2 text-black sm:rounded-sm",
                 "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
               )}
+              placeholder="Username"
               {...register("username", {
                 required: {
                   value: true,
@@ -69,20 +81,19 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
           </div>
           <div className="mt-5 flex justify-end">
             <button
+              disabled={isSubmitting || isSubmitSuccessful}
               type="submit"
               className={clsx(
                 "h-16 w-32 rounded-md bg-white p-2 text-lg font-normal text-black transition-colors duration-200 ease-in-out",
                 "hover:bg-gray-300 disabled:bg-gray-300"
               )}
             >
-              Submit
+              {isSubmitting ? <LoadingSpinner /> : "Submit"}
             </button>
           </div>
-          <DevTool control={control} />
         </form>
       </div>
     </Layout>
   );
 };
-
 export default SubmittingQuiz;
