@@ -1,10 +1,10 @@
 import React from "react";
 import Layout from "./Layout";
-import { QuizType, AnswersObjState } from "../pages/quiz/[index]";
 import { useForm, SubmitHandler } from "react-hook-form";
 import clsx from "clsx";
 import LoadingSpinner from "./LoadingSpinner";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
+import { QuizType, AnswersObjState } from "../pages/quiz/[slug]";
 
 interface Props {
   quiz: QuizType;
