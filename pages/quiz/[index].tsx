@@ -1,27 +1,24 @@
 import Layout from "../../components/Layout";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../lib/prisma";
+import SubmittingQuiz from "../../components/SubmittingQuiz";
 import clsx from "clsx";
 
-export interface Props {
-  quiz: QuizType;
-}
-interface QuizType {
+export interface QuizType {
   id: number;
   title: string;
   slug: string;
   description: string;
   questions: QuestionType[];
 }
-interface QuestionType {
+export interface QuestionType {
   id: number;
   question: string;
   answers: string[];
   correctAnswer?: string;
 }
-
-interface AnswerState {
+export interface AnswersObjState {
   title: string;
   slug: string;
   quizID: number;
@@ -29,67 +26,106 @@ interface AnswerState {
     [key: number]: string;
   };
 }
+interface Props {
+  quiz: QuizType;
+}
+
 const Quiz = ({ quiz }: Props) => {
-  const [answersObj, setAnswersObj] = useState<AnswerState>({} as AnswerState);
-  const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    question: QuestionType
-  ) => {
+  const [answersObj, setAnswersObj] = useState<AnswersObjState>({
+    title: quiz.title,
+    slug: quiz.slug,
+    quizID: quiz.id,
+    questions: {},
+  } as AnswersObjState);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showSubmitComponent, setShowSubmitComponent] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+
+  const handleNextQuestion = () => {
+    // if current question is answered && current question is not the last question
+    setSelectedAnswer("");
+    if (
+      Object.entries(answersObj.questions).length === currentQuestion + 1 &&
+      currentQuestion < quiz.questions.length - 1
+    ) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else if (currentQuestion === quiz.questions.length - 1) {
+      // if we are on the last question we show the submit component
+      setShowSubmitComponent(true);
+    }
+  };
+  const handleAnswer = (answer: string, questionID: number) => {
+    setSelectedAnswer(answer);
     setAnswersObj({
       ...answersObj,
       questions: {
         ...answersObj.questions,
-        [question.id]: e.target.value,
+        [questionID]: answer,
       },
     });
-    console.log("answersObj", answersObj);
   };
-  useEffect(() => {
-    setAnswersObj({
-      title: quiz.title,
-      slug: quiz.slug,
-      quizID: quiz.id,
-      questions: {},
-    });
-  }, []);
+  if (showSubmitComponent) {
+    return <SubmittingQuiz quiz={quiz} answersObj={answersObj} />;
+  }
   return (
     <Layout>
       <div className="mx-auto w-[650px] max-w-full">
-        <h1 className="mb-4 text-center text-5xl font-bold antialiased">
+        <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
           {quiz.title}
         </h1>
-        <p className="mx-auto mt-5 w-[550px] max-w-full text-center text-xl font-normal text-gray-300 antialiased">
+        <p className="mx-auto mt-5 w-[550px] max-w-full break-words text-center text-xl font-normal text-gray-300 antialiased">
           {quiz.description}
         </p>
-        <div>
-          <ul>
-            {quiz.questions.map((question: QuestionType) => (
-              <li key={question.id}>
-                <p className="text-xl font-bold antialiased">
-                  {question.question}
-                </p>
-                <select
-                  className="text-black"
-                  onChange={(e) => handleChange(e, question)}
-                >
-                  {question.answers.map((answer: string) => (
-                    <option className="text-black" key={answer}>
-                      {answer}
-                    </option>
-                  ))}
-                </select>
-              </li>
+        <div className="mt-5 flex flex-col justify-center">
+          <div className="mb-4 min-h-[100px]">
+            <h2 className="text-all break-words text-2xl font-normal antialiased">
+              {quiz.questions[currentQuestion]?.question} What is the name of
+              the second pokemon in the first movie?
+            </h2>
+          </div>
+          <div
+            className={clsx(
+              "mb-4 grid max-w-full grid-cols-1 gap-1.5",
+              quiz.questions[currentQuestion]?.answers.length === 4
+                ? "sm:grid-cols-2"
+                : "sm:grid-cols-1"
+            )}
+          >
+            {quiz.questions[currentQuestion]?.answers.map((answer) => (
+              <button
+                key={answer}
+                className={clsx(
+                  "min-h-[60px] w-full max-w-full break-all rounded-sm bg-white p-2 text-lg text-black",
+                  "dura transition-colors duration-200 ease-in-out",
+                  {
+                    "bg-[#ffad21]": selectedAnswer === answer,
+                    "hover:bg-gray-300": selectedAnswer !== answer,
+                  }
+                )}
+                onClick={() =>
+                  handleAnswer(
+                    answer,
+                    Number(quiz.questions[currentQuestion]?.id)
+                  )
+                }
+              >
+                {answer}
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
-        <button
-          className="rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={() => {
-            console.log(answersObj);
-          }}
-        >
-          send
-        </button>
+        <div className="flex justify-end">
+          <button
+            className={clsx(
+              "h-16 w-32 rounded-md bg-white p-2 text-lg font-normal text-black transition-colors duration-200 ease-in-out",
+              "hover:bg-gray-300 disabled:bg-gray-300"
+            )}
+            onClick={handleNextQuestion}
+            disabled={selectedAnswer === ""}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </Layout>
   );
