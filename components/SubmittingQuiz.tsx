@@ -4,6 +4,7 @@ import { QuizType, AnswersObjState } from "../pages/quiz/[index]";
 import { useForm, SubmitHandler } from "react-hook-form";
 import clsx from "clsx";
 import LoadingSpinner from "./LoadingSpinner";
+import { Router, useRouter } from "next/router";
 
 interface Props {
   quiz: QuizType;
@@ -15,15 +16,14 @@ type Inputs = {
 };
 
 const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<Inputs>();
-  console.log(quiz.id);
   const onSubmit: SubmitHandler<Inputs> = async (data, e) => {
     const { username } = data;
-    console.log("lol", { ...answersObj, username });
     await fetch(`/api/quiz/${quiz.slug}`, {
       method: "POST",
       headers: {
@@ -32,8 +32,7 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
       body: JSON.stringify({ ...answersObj, username }),
     }).then((res) => {
       if (res.ok) {
-        alert("Submitted!");
-        // TODO: redirect to quiz results page
+        router.push(`/quiz/${quiz.slug}/results?user=${username}`);
       } else {
         // TODO: handle error
         alert("Error submitting!");
