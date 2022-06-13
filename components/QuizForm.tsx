@@ -79,7 +79,6 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
         return res.json();
       })
       .then((data: DataTypes) => {
-        console.log(data);
         setSentFormData(data); // passing the response object to the parent component
         return clearErrors("post");
       })

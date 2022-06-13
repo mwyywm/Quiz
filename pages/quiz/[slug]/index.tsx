@@ -1,8 +1,8 @@
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
 import React, { useState } from "react";
 import { GetServerSideProps } from "next";
-import prisma from "../../lib/prisma";
-import SubmittingQuiz from "../../components/SubmittingQuiz";
+import prisma from "../../../lib/prisma";
+import SubmittingQuiz from "../../../components/SubmittingQuiz";
 import clsx from "clsx";
 
 export interface QuizType {
@@ -132,10 +132,10 @@ const Quiz = ({ quiz }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const index = ctx.params && ctx.params.index;
+  const slug = ctx.params && ctx.params.slug;
   const prismaQuiz = await prisma.quiz.findUnique({
     where: {
-      slug: index && index.toString(),
+      slug: slug && slug.toString(),
     },
     include: {
       questions: {

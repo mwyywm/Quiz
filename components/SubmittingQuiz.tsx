@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import Layout from "./Layout";
-import { QuizType, AnswersObjState } from "../pages/quiz/[index]";
+import { QuizType, AnswersObjState } from "../pages/quiz/[slug]";
 
 interface Props {
   quiz: QuizType;
