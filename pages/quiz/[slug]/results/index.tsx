@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next/types";
 import Layout from "../../../../components/Layout";
+import QuizResultCard from "../../../../components/QuizResultCard";
 
 interface Props {
   quizResult: QuizResultType;
@@ -28,26 +29,29 @@ const QuizResults = ({ quizResult, user }: Props) => {
           {quizResult.title}
         </h1>
         {user && (
-          <div>
+          <div className="mb-10">
             <h2 className="mb-4 break-words text-center text-3xl font-normal antialiased">
               Your score
             </h2>
-            <div className="flex max-w-full items-center justify-between bg-white p-2 py-4 text-black">
-              <p className="w-[75%] break-words text-xl">{user.username}</p>
-              <p className="max-w-[25%] break-words text-xl">
-                {user.score * 100} points
-              </p>
+            <QuizResultCard name={user.username} score={user.score} />
+          </div>
+        )}
+        {quizResult && (
+          <div>
+            <h2 className="mb-4 break-words text-center text-3xl font-normal antialiased">
+              Leaderboard
+            </h2>
+            <div className="flex flex-col gap-2">
+              {quizResult.results.map((result) => (
+                <QuizResultCard
+                  name={result.username}
+                  score={result.score}
+                  key={result.username}
+                />
+              ))}
             </div>
           </div>
         )}
-        <ul>
-          {quizResult.results.map((result) => (
-            <li key={result.id}>
-              {result.username} - {result.score * 100} / {result.total * 100}{" "}
-              points
-            </li>
-          ))}
-        </ul>
       </div>
     </Layout>
   );
