@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../../lib/prisma";
 import SubmittingQuiz from "../../../components/SubmittingQuiz";
+import QuizProgress from "../../../components/QuizProgress";
 import clsx from "clsx";
 
 export interface QuizType {
@@ -40,6 +41,8 @@ const Quiz = ({ quiz }: Props) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSubmitComponent, setShowSubmitComponent] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
+  console.log(currentQuestion + 1);
+  console.log(quiz.questions.length);
 
   const handleNextQuestion = () => {
     // if current question is answered && current question is not the last question
@@ -76,6 +79,10 @@ const Quiz = ({ quiz }: Props) => {
         <p className="mx-auto mt-5 w-[550px] max-w-full break-words text-center text-xl font-normal text-gray-300 antialiased">
           {quiz.description}
         </p>
+        <QuizProgress
+          current={currentQuestion + 1}
+          total={quiz.questions.length}
+        />
         <div className="mt-5 flex flex-col justify-center">
           <div className="mb-4 min-h-[100px]">
             <h2 className="text-all break-words text-2xl font-normal antialiased">
