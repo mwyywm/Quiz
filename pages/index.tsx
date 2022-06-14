@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import QuizButton from "../components/QuizButton";
 import LinkAsButton from "../components/LinkAsButton";
 
 const Landing = () => {
+  const [randomquizLink, setRandomquizLink] = useState("");
   const mockData = [
     { name: "Pokemon quiz", questions: 5 },
     { name: "YouTube quiz", questions: 12 },
   ];
+
+  useEffect(() => {
+    // on mount we fetch the random quiz we link to for our "Random quiz" button
+    fetch("/api/randomquiz")
+      .then((res) => res.json())
+      .then((data) => {
+        setRandomquizLink(
+          `/quiz/${data[Math.floor(Math.random() * data.length)].slug}`
+        );
+      });
+  }, []);
   return (
     <Layout>
       <section className="mb-24">
@@ -25,7 +37,7 @@ const Landing = () => {
             <LinkAsButton href="/createquiz">Create quiz</LinkAsButton>
           </div>
           <div className="m-2">
-            <LinkAsButton href="/createquiz" variant="secondary">
+            <LinkAsButton href={randomquizLink} variant="secondary">
               Random quiz
             </LinkAsButton>
           </div>

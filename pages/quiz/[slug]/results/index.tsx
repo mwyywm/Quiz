@@ -24,7 +24,7 @@ const QuizResults = ({ quizResult, user }: Props) => {
   console.log("username", user);
   return (
     <Layout>
-      <div className="mx-auto w-[650px] max-w-full">
+      <div className="mx-auto mb-14 w-[650px] max-w-full">
         <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
           {quizResult.title}
         </h1>
