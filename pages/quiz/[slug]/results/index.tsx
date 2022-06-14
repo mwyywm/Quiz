@@ -88,6 +88,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       id: true,
       title: true,
       results: {
+        orderBy: {
+          score: "desc",
+        },
         select: {
           username: true,
           id: true,
