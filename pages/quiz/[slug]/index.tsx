@@ -79,8 +79,7 @@ const Quiz = ({ quiz }: Props) => {
         <div className="mt-5 flex flex-col justify-center">
           <div className="mb-4 min-h-[100px]">
             <h2 className="text-all break-words text-2xl font-normal antialiased">
-              {quiz.questions[currentQuestion]?.question} What is the name of
-              the second pokemon in the first movie?
+              {quiz.questions[currentQuestion]?.question}
             </h2>
           </div>
           <div
