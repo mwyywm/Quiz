@@ -35,6 +35,7 @@ const Tooltip = forwardRef(
         setElementRect(ref.current.getBoundingClientRect());
       }
     }, [ref]);
+
     // on windows resize we need to recalculate the elementRect
     useEffect(() => {
       window.addEventListener("resize", () => {
@@ -46,6 +47,16 @@ const Tooltip = forwardRef(
         window.removeEventListener("resize", () => {});
       };
     }, [ref]);
+    useEffect(() => {
+      if (clicked) {
+        const timer = setTimeout(() => {
+          setClicked(false);
+        }, 2000);
+        return () => {
+          clearTimeout(timer);
+        };
+      }
+    }, [clicked]);
     return (
       <React.Fragment>
         <div

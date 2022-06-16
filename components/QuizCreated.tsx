@@ -9,7 +9,6 @@ function Icon() {
       width="21"
       height="24"
       fill="none"
-      viewBox="0 0 21 24"
     >
       <path fill="url(#pattern0)" d="M0 0H20.364V24H0z"></path>
       <defs>
@@ -34,7 +33,18 @@ function Icon() {
     </svg>
   );
 }
-const QuizCreated = (quiz: any) => {
+interface QuizType {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+}
+interface Props {
+  quiz: QuizType;
+}
+const QuizCreated = ({quiz}: Props) => {
+  console.log(quiz);
+  const { title, slug } = quiz;
   const firstCopyRef = useRef(null);
   const secondCopyRef = useRef(null);
 
@@ -45,16 +55,16 @@ const QuizCreated = (quiz: any) => {
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
       <h3 className="text-center text-2xl font-bold text-white">
-        {quiz.quiz.title} has been created
+        {title} has been created
       </h3>
       <Tooltip ref={firstCopyRef} text="Copy to clipboard">
         <div
           className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-          onClick={() => copyToClipboard(quiz.quiz.slug)}
+          onClick={() => copyToClipboard(slug)}
           ref={firstCopyRef}
         >
           <input
-            value={`${window.location.origin}/quiz/${quiz.quiz.slug}`}
+            value={`${window.location.origin}/quiz/${slug}`}
             readOnly
             className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
           />
@@ -64,11 +74,11 @@ const QuizCreated = (quiz: any) => {
       <Tooltip ref={secondCopyRef} text="Copy to clipboard">
         <div
           className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-          onClick={() => copyToClipboard(quiz.quiz.slug)}
+          onClick={() => copyToClipboard(`${slug}/results`)}
           ref={secondCopyRef}
         >
           <input
-            value={`${window.location.origin}/quiz/${quiz.quiz.slug}`}
+            value={`${window.location.origin}/quiz/${slug}/results`}
             readOnly
             className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
           />
