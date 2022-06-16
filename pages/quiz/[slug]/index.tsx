@@ -41,8 +41,6 @@ const Quiz = ({ quiz }: Props) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSubmitComponent, setShowSubmitComponent] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
-  console.log("currenctquestion+1 index", currentQuestion + 1);
-  console.log("questions.length", quiz.questions.length);
 
   const handleNextQuestion = () => {
     // if current question is answered && current question is not the last question

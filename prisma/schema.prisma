@@ -29,6 +29,7 @@ model Question {
 
 model Result {
   id          Int      @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
   quiz        Quiz     @relation(fields: [quizId], references: [id])
   quizId      Int
   username    String

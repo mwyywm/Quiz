@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next/types";
 import Layout from "../../../../components/Layout";
 import QuizResultCard from "../../../../components/QuizResultCard";
+import prisma from "../../../../lib/prisma";
 
 interface Props {
   quizResult: QuizResultType;
@@ -14,6 +15,7 @@ export interface QuizResultType {
 export interface ResultsType {
   id: number;
   username: string;
+  createdAt: Date;
   score: number;
   total: number;
 }
@@ -21,7 +23,6 @@ export interface ResultsType {
 const QuizResults = ({ quizResult, user }: Props) => {
   // if the user is true we show the result of the latest quiz made by the ?user= and the leaderboard.
   // if the user is falsy we just show the leaderboard.
-  console.log("username", user);
   return (
     <Layout>
       <div className="mx-auto mb-14 w-[650px] max-w-full">
@@ -33,7 +34,7 @@ const QuizResults = ({ quizResult, user }: Props) => {
             <h2 className="mb-4 break-words text-center text-3xl font-normal antialiased">
               Your score
             </h2>
-            <QuizResultCard name={user.username} score={user.score} />
+            <QuizResultCard result={user} />
           </div>
         )}
         {quizResult && (
@@ -44,9 +45,9 @@ const QuizResults = ({ quizResult, user }: Props) => {
             <div className="flex flex-col gap-2">
               {quizResult.results.map((result) => (
                 <QuizResultCard
-                  name={result.username}
-                  score={result.score}
+                  result={result}
                   key={result.username}
+                  showDate
                 />
               ))}
             </div>
@@ -93,6 +94,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
         select: {
           username: true,
+          createdAt: true,
           id: true,
           score: true,
           total: true,

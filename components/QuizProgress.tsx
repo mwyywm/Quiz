@@ -6,7 +6,6 @@ interface Props {
 const QuizProgress = ({ current, total }: Props) => {
   const progressPercentage = (current / total) * 100;
   const previusProgressPercentage = (current - 1 / total) * 100;
-  console.log("curr", current - 1 / total);
   const numberSpring = useSpring({
     number: progressPercentage
       ? progressPercentage
