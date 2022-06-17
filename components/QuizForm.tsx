@@ -153,6 +153,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
       >
         <input
           placeholder="Title"
+          aria-label="Title"
           onInput={() => {
             clearErrors("post");
           }}
@@ -180,10 +181,13 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
           }}
         />
         {formState.errors.title && (
-          <p className="text-red-500">{formState.errors.title.message}</p>
+          <p className="text-red-500" role="alert">
+            {formState.errors.title.message}
+          </p>
         )}
         <input
           placeholder="Description"
+          aria-label="Description"
           {...register("description", {
             required: "Description is required",
             minLength: {
@@ -204,7 +208,9 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
           }}
         />
         {formState.errors.description?.message && (
-          <p className="text-red-500">{formState.errors.description.message}</p>
+          <p className="text-red-500" role="alert">
+            {formState.errors.description.message}
+          </p>
         )}
         {fields.map((field, index: number) => (
           <React.Fragment key={field.id}>
@@ -213,6 +219,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
             </label>
             <input
               placeholder={`Question ${index + 1}`}
+              aria-label={`Question ${index + 1}`}
               {...register(`questions.${index}.question`, {
                 required: "Question is required",
               })}
@@ -225,7 +232,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
               }}
             />
             {formState.errors.questions?.[index] && (
-              <p className="text-red-500">
+              <p className="text-red-500" role="alert">
                 {formState.errors.questions?.[index]?.question?.message}
               </p>
             )}
@@ -236,6 +243,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                     <div className="mt-2 flex items-center justify-center">
                       <input
                         placeholder={`Answer ${i + 1}`}
+                        aria-label={`Answer ${i + 1}`}
                         {...register(`questions.${index}.answers.${i}`, {
                           required: "Answer is required",
                         })}
@@ -249,6 +257,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                       />
                       <input
                         type="radio"
+                        aria-label="Correct answer"
                         value={i}
                         className={clsx(
                           "ml-2 h-6 w-6 appearance-none rounded-full border-2 border-[#5c6070] bg-[#40434f] checked:bg-amber-500",
@@ -264,7 +273,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                       />
                     </div>
                     {formState.errors.questions?.[index] && (
-                      <p className="text-red-500">
+                      <p className="text-red-500" role="alert">
                         {
                           formState.errors.questions?.[index]?.answers?.[i]
                             ?.message
@@ -277,7 +286,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
             </div>
 
             {formState.errors.questions?.[index] && (
-              <p className="text-red-500">
+              <p className="text-red-500" role="alert">
                 {formState.errors.questions?.[index]?.correctAnswer?.message}
               </p>
             )}
@@ -290,6 +299,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
               {!(answerAmount[field.id]?.length === 4) && (
                 <div
                   role="button"
+                  aria-label="Add answer"
                   tabIndex={0}
                   className={clsx(
                     "my-1 mr-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors",
@@ -311,6 +321,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                 <div
                   role="button"
                   tabIndex={0}
+                  aria-label={`Remove question ${index + 1}`}
                   className={clsx(
                     "my-1 ml-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
                     answerAmount[field.id]?.length === 4 ? "xs:ml-0" : "xs:ml-1" // when showing remove button, remove the xs:ml-1 class
@@ -332,6 +343,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
         <div
           role="button"
           tabIndex={0}
+          aria-label="Add new question"
           className="my-1 cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]"
           onClick={() => {
             append({ question: "", answers: [] });
@@ -346,10 +358,14 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
           Add question
         </div>
         {formState.errors.submit && (
-          <p className="text-red-500">{formState.errors.submit?.message}</p>
+          <p className="text-red-500" role="alert">
+            {formState.errors.submit?.message}
+          </p>
         )}
         {formState.errors.post && (
-          <p className="text-red-500">{formState.errors.post?.message}</p>
+          <p className="text-red-500" role="alert">
+            {formState.errors.post?.message}
+          </p>
         )}
         <button
           className={clsx(
