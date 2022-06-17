@@ -1,6 +1,6 @@
 // react hook form import
-import { useForm, useFieldArray } from "react-hook-form";
 import React, { useState, useEffect } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 import clsx from "clsx";
 interface answerAmountType {
   init: undefined[];
@@ -38,6 +38,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
     defaultValues: {
       title: "",
       description: "",
+      post: { message: undefined, error: undefined, type: undefined },
+      submit: { message: undefined, error: undefined, type: undefined },
       questions: [
         {
           question: "",
@@ -153,7 +155,9 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
       >
         <input
           placeholder="Title"
-          onInput={() => clearErrors("post")}
+          onInput={() => {
+            clearErrors("post");
+          }}
           {...register("title", {
             required: "Title is required",
             maxLength: {
@@ -211,7 +215,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
             </label>
             <input
               placeholder={`Question ${index + 1}`}
-              {...register(`questions.[${index}].question`, {
+              {...register(`questions.${index}.question`, {
                 required: "Question is required",
               })}
               className={clsx(
@@ -233,7 +237,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                   <div className="flex items-center justify-center">
                     <input
                       placeholder={`answer ${i + 1}`}
-                      {...register(`questions[${index}].answers[${i}]`, {
+                      {...register(`questions.${index}.answers.${i}`, {
                         required: "Answer is required",
                       })}
                       className={clsx(
@@ -249,7 +253,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                       value={i}
                       style={{ accentColor: "#FFAD21" }}
                       className={clsx("form-radio mx-2 h-5 w-5 ")}
-                      {...register(`questions[${index}].correctAnswer`, {
+                      {...register(`questions.${index}.correctAnswer`, {
                         required:
                           "You must select a correct answer for this question",
                       })}
@@ -261,7 +265,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                   {formState.errors.questions?.[index] && (
                     <p className="text-red-500">
                       {
-                        formState.errors.questions?.[index].answers?.[i]
+                        formState.errors.questions?.[index]?.answers?.[i]
                           ?.message
                       }
                     </p>
@@ -271,7 +275,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
             )}
             {formState.errors.questions?.[index] && (
               <p className="text-red-500">
-                {formState.errors.questions?.[index].correctAnswer?.message}
+                {formState.errors.questions?.[index]?.correctAnswer?.message}
               </p>
             )}
             <div
