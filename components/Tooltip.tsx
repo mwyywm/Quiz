@@ -1,9 +1,11 @@
 import React, { forwardRef, useEffect, useState } from "react";
+import { CopiedObjTypes } from "./QuizCreated";
 import Portal from "./Portal";
 
 interface TooltipProps {
   children: React.ReactNode;
   text: string;
+  setCopiedObj: React.Dispatch<React.SetStateAction<CopiedObjTypes>>;
   clickedText?: string;
 }
 
@@ -22,6 +24,7 @@ const Tooltip = forwardRef(
       children,
       text = "Copy to clipboard",
       clickedText = "Copied!",
+      setCopiedObj,
     }: TooltipProps,
     ref: React.ForwardedRef<HTMLDivElement>
   ) => {
@@ -47,10 +50,18 @@ const Tooltip = forwardRef(
         window.removeEventListener("resize", () => {});
       };
     }, [ref]);
+    const name =
+      ref && "current" in ref && ref.current?.getAttribute("data-name");
     useEffect(() => {
       if (clicked) {
         const timer = setTimeout(() => {
           setClicked(false);
+          if (name) {
+            setCopiedObj((prevState: CopiedObjTypes) => ({
+              ...prevState,
+              [name]: false,
+            }));
+          }
         }, 2000);
         return () => {
           clearTimeout(timer);
@@ -64,7 +75,15 @@ const Tooltip = forwardRef(
           onMouseLeave={() => setShow(false)}
           onFocus={() => setShow(true)}
           onBlur={() => setShow(false)}
-          onClick={() => setClicked(true)}
+          onClick={() => {
+            setClicked(true);
+            if (name) {
+              setCopiedObj((prevState) => ({
+                ...prevState,
+                [name]: true,
+              }));
+            }
+          }}
           className="m-auto w-80 max-w-full"
         >
           {children}

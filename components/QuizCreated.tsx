@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Tooltip from "./Tooltip";
 
 function Icon() {
@@ -42,16 +42,23 @@ interface QuizType {
 interface Props {
   quiz: QuizType;
 }
+export interface CopiedObjTypes {
+  quizLink: boolean;
+  quizResult: boolean;
+}
 const QuizCreated = ({ quiz }: Props) => {
-  console.log(quiz);
   const { title, slug } = quiz;
+  const [copiedObj, setCopiedObj] = useState<CopiedObjTypes>({
+    quizLink: false,
+    quizResult: false,
+  });
   const firstCopyRef = useRef(null);
   const secondCopyRef = useRef(null);
 
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
-
+  console.log(copiedObj); // temporary - will be removed later
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
       <h1 className="mb-6 text-center text-3xl font-bold text-white antialiased">
@@ -59,11 +66,16 @@ const QuizCreated = ({ quiz }: Props) => {
       </h1>
       <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">
         Quiz link:
-        <Tooltip ref={firstCopyRef} text="Copy to clipboard">
+        <Tooltip
+          ref={firstCopyRef}
+          text="Copy to clipboard"
+          setCopiedObj={setCopiedObj}
+        >
           <div
             className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
             onClick={() => copyToClipboard(slug)}
             ref={firstCopyRef}
+            data-name="quizLink"
           >
             <input
               value={`${window.location.origin}/quiz/${slug}`}
@@ -76,11 +88,16 @@ const QuizCreated = ({ quiz }: Props) => {
       </label>
       <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">
         Quiz leaderboard:
-        <Tooltip ref={secondCopyRef} text="Copy to clipboard">
+        <Tooltip
+          ref={secondCopyRef}
+          text="Copy to clipboard"
+          setCopiedObj={setCopiedObj}
+        >
           <div
             className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
             onClick={() => copyToClipboard(`${slug}/results`)}
             ref={secondCopyRef}
+            data-name="quizResult"
           >
             <input
               value={`${window.location.origin}/quiz/${slug}/results`}
