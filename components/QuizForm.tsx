@@ -230,7 +230,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
               </p>
             )}
             {(answerAmount[field.id] || answerAmount.init).map(
-              (val, i: number) => (
+              (_, i: number) => (
                 <React.Fragment key={field.id + i}>
                   <div className="flex items-center justify-center">
                     <input
@@ -288,7 +288,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                   readOnly
                   className={clsx(
                     "my-1 mr-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
-                    "xs:mr-1"
+                    "xs:mr-1",
+                    index === 0 ? "mr-0 xs:mr-0" : "xs:mr-1"
                   )}
                   onClick={() => handleNewQuestion(field.id)}
                   onKeyDown={(e) => {
@@ -299,24 +300,23 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                   }}
                 />
               )}
-              <input
-                value={`Remove question ${index + 1}`}
-                readOnly
-                className={clsx(
-                  "my-1 ml-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
-                  "xs:ml-1",
-                  {
-                    "xs:ml-0": answerAmount[field.id]?.length === 4, // reset margin left when we only show 1 button
-                  }
-                )}
-                onClick={() => remove(index)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    remove(index);
-                  }
-                }}
-              />
+              {index > 0 && (
+                <input
+                  value={`Remove question ${index + 1}`}
+                  readOnly
+                  className={clsx(
+                    "my-1 ml-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
+                    answerAmount[field.id]?.length === 4 ? "xs:ml-0" : "xs:ml-1" // when showing remove button, remove the xs:ml-1 class
+                  )}
+                  onClick={() => remove(index)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      remove(index);
+                    }
+                  }}
+                />
+              )}
             </div>
           </React.Fragment>
         ))}
@@ -362,7 +362,6 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
           {formState.isSubmitSuccessful ? "Submitted!" : "Submit"}
         </button>
       </form>
-      <p>{JSON.stringify(data)}</p>
     </>
   );
 }
