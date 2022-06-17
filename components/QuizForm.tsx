@@ -172,8 +172,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
             },
           })}
           className={clsx(
-            "mt-1 h-10 w-full rounded-sm pl-1",
-            "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+            "mt-1 h-10 w-full rounded border border-[#5c6070] bg-[#40434f] pl-1 text-white",
+            "focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-amber-500"
           )}
           onKeyDown={(e) => {
             e.key === "Enter" && e.preventDefault();
@@ -196,8 +196,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
             },
           })}
           className={clsx(
-            "mt-2 h-10 w-full rounded-sm pl-1",
-            "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+            "mt-2 h-10 w-full rounded border border-[#5c6070] bg-[#40434f] pl-1 text-white",
+            "focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-amber-500"
           )}
           onKeyDown={(e) => {
             e.key === "Enter" && e.preventDefault();
@@ -217,8 +217,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                 required: "Question is required",
               })}
               className={clsx(
-                "my-1  h-10 w-full rounded-sm pl-1",
-                "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
+                "mt-2 h-10 w-full rounded border border-[#5c6070] bg-[#40434f] pl-1 text-white",
+                "focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-amber-500"
               )}
               onKeyDown={(e) => {
                 e.key === "Enter" && e.preventDefault();
@@ -229,48 +229,53 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                 {formState.errors.questions?.[index]?.question?.message}
               </p>
             )}
-            {(answerAmount[field.id] || answerAmount.init).map(
-              (_, i: number) => (
-                <React.Fragment key={field.id + i}>
-                  <div className="flex items-center justify-center">
-                    <input
-                      placeholder={`Answer ${i + 1}`}
-                      {...register(`questions.${index}.answers.${i}`, {
-                        required: "Answer is required",
-                      })}
-                      className={clsx(
-                        "my-1 mt-2 h-10 w-full rounded-sm pl-1",
-                        "focus:outline focus:outline-2 focus:outline-offset-2  focus:outline-gray-400"
-                      )}
-                      onKeyDown={(e) => {
-                        e.key === "Enter" && e.preventDefault();
-                      }}
-                    />
-                    <input
-                      type="radio"
-                      value={i}
-                      style={{ accentColor: "#FFAD21" }}
-                      className={clsx("form-radio mx-2 h-5 w-5 ")}
-                      {...register(`questions.${index}.correctAnswer`, {
-                        required:
-                          "You must select a correct answer for this question",
-                      })}
-                      onKeyDown={(e) => {
-                        e.key === "Enter" && e.preventDefault();
-                      }}
-                    />
-                  </div>
-                  {formState.errors.questions?.[index] && (
-                    <p className="text-red-500">
-                      {
-                        formState.errors.questions?.[index]?.answers?.[i]
-                          ?.message
-                      }
-                    </p>
-                  )}
-                </React.Fragment>
-              )
-            )}
+            <div className="mb-1">
+              {(answerAmount[field.id] || answerAmount.init).map(
+                (_, i: number) => (
+                  <React.Fragment key={field.id + i}>
+                    <div className="mt-2 flex items-center justify-center">
+                      <input
+                        placeholder={`Answer ${i + 1}`}
+                        {...register(`questions.${index}.answers.${i}`, {
+                          required: "Answer is required",
+                        })}
+                        className={clsx(
+                          "h-10 w-full rounded border border-[#5c6070] bg-[#40434f] pl-1 text-white",
+                          "focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-amber-500"
+                        )}
+                        onKeyDown={(e) => {
+                          e.key === "Enter" && e.preventDefault();
+                        }}
+                      />
+                      <input
+                        type="radio"
+                        value={i}
+                        className={clsx(
+                          "ml-2 h-6 w-6 appearance-none rounded-full border-2 border-[#5c6070] bg-[#40434f] checked:bg-amber-500",
+                          "focus:outline-1 focus:outline-amber-500"
+                        )}
+                        {...register(`questions.${index}.correctAnswer`, {
+                          required:
+                            "You must select a correct answer for this question",
+                        })}
+                        onKeyDown={(e) => {
+                          e.key === "Enter" && e.preventDefault();
+                        }}
+                      />
+                    </div>
+                    {formState.errors.questions?.[index] && (
+                      <p className="text-red-500">
+                        {
+                          formState.errors.questions?.[index]?.answers?.[i]
+                            ?.message
+                        }
+                      </p>
+                    )}
+                  </React.Fragment>
+                )
+              )}
+            </div>
+
             {formState.errors.questions?.[index] && (
               <p className="text-red-500">
                 {formState.errors.questions?.[index]?.correctAnswer?.message}
@@ -283,12 +288,12 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
               )}
             >
               {!(answerAmount[field.id]?.length === 4) && (
-                <input
-                  value="Add answer"
-                  readOnly
+                <div
+                  role="button"
+                  tabIndex={0}
                   className={clsx(
-                    "my-1 mr-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
-                    "xs:mr-1",
+                    "my-1 mr-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors",
+                    "hover:bg-[#ffad21]",
                     index === 0 ? "mr-0 xs:mr-0" : "xs:mr-1"
                   )}
                   onClick={() => handleNewQuestion(field.id)}
@@ -298,12 +303,14 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                       handleNewQuestion(field.id);
                     }
                   }}
-                />
+                >
+                  Add answer
+                </div>
               )}
-              {index > 0 && (
-                <input
-                  value={`Remove question ${index + 1}`}
-                  readOnly
+              {fields.length > 1 && (
+                <div
+                  role="button"
+                  tabIndex={0}
                   className={clsx(
                     "my-1 ml-0 w-full cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]",
                     answerAmount[field.id]?.length === 4 ? "xs:ml-0" : "xs:ml-1" // when showing remove button, remove the xs:ml-1 class
@@ -315,14 +322,16 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                       remove(index);
                     }
                   }}
-                />
+                >
+                  Remove question {index + 1}
+                </div>
               )}
             </div>
           </React.Fragment>
         ))}
-        <input
-          value="Add question"
-          readOnly
+        <div
+          role="button"
+          tabIndex={0}
           className="my-1 cursor-pointer rounded-sm bg-amber-500 px-4 py-2 text-center text-black transition-colors hover:bg-[#ffad21]"
           onClick={() => {
             append({ question: "", answers: [] });
@@ -333,7 +342,9 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
               append({ question: "", answers: [] });
             }
           }}
-        />
+        >
+          Add question
+        </div>
         {formState.errors.submit && (
           <p className="text-red-500">{formState.errors.submit?.message}</p>
         )}
