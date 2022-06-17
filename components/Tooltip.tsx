@@ -65,14 +65,14 @@ const Tooltip = forwardRef(
           onFocus={() => setShow(true)}
           onBlur={() => setShow(false)}
           onClick={() => setClicked(true)}
-          className="m-auto w-80"
+          className="m-auto w-80 max-w-full"
         >
           {children}
         </div>
         {show && (
           <Portal>
             <div
-              className={`absolute z-10 max-w-full cursor-none rounded-lg border border-gray-300 bg-white text-center shadow-lg `}
+              className={`absolute z-10 max-w-full rounded-lg border border-gray-300 bg-white text-center shadow-lg `}
               role="tooltip"
               style={
                 elementRect && {
@@ -81,6 +81,8 @@ const Tooltip = forwardRef(
                   width: elementRect.width,
                 }
               }
+              onMouseEnter={() => setShow(true)}
+              onMouseLeave={() => setShow(false)}
             >
               <p className="text-m text-gray-800">
                 {clicked && clickedText ? clickedText : text}
