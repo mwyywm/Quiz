@@ -14,7 +14,16 @@ export interface SentFormData {
 }
 
 const CreateQuizPage = () => {
-  const [sentFormData, setSentFormData] = useState(null as SentFormData | null);
+  const [sentFormData, setSentFormData] = useState<SentFormData>();
+  if (sentFormData) {
+    return (
+      <Layout>
+        <section className="mb-24">
+          <QuizCreated quiz={sentFormData} />
+        </section>
+      </Layout>
+    );
+  }
   return (
     <Layout>
       <section className="mb-24">
@@ -32,11 +41,7 @@ const CreateQuizPage = () => {
       </section>
       <section>
         <div className="pb mx-auto w-[650px] max-w-full pb-16">
-          {sentFormData ? (
-            <QuizCreated quiz={sentFormData} />
-          ) : (
-            <QuizForm setSentFormData={setSentFormData} />
-          )}
+          <QuizForm setSentFormData={setSentFormData} />
         </div>
       </section>
     </Layout>

@@ -42,7 +42,7 @@ interface QuizType {
 interface Props {
   quiz: QuizType;
 }
-const QuizCreated = ({quiz}: Props) => {
+const QuizCreated = ({ quiz }: Props) => {
   console.log(quiz);
   const { title, slug } = quiz;
   const firstCopyRef = useRef(null);
@@ -54,37 +54,43 @@ const QuizCreated = ({quiz}: Props) => {
 
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
-      <h3 className="text-center text-2xl font-bold text-white">
+      <h1 className="mb-6 text-center text-3xl font-bold text-white antialiased">
         {title} has been created
-      </h3>
-      <Tooltip ref={firstCopyRef} text="Copy to clipboard">
-        <div
-          className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-          onClick={() => copyToClipboard(slug)}
-          ref={firstCopyRef}
-        >
-          <input
-            value={`${window.location.origin}/quiz/${slug}`}
-            readOnly
-            className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
-          />
-          <Icon />
-        </div>
-      </Tooltip>
-      <Tooltip ref={secondCopyRef} text="Copy to clipboard">
-        <div
-          className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-          onClick={() => copyToClipboard(`${slug}/results`)}
-          ref={secondCopyRef}
-        >
-          <input
-            value={`${window.location.origin}/quiz/${slug}/results`}
-            readOnly
-            className="h-8 w-full cursor-pointer pr-4 focus:outline-none"
-          />
-          <Icon />
-        </div>
-      </Tooltip>
+      </h1>
+      <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">
+        Quiz link:
+        <Tooltip ref={firstCopyRef} text="Copy to clipboard">
+          <div
+            className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
+            onClick={() => copyToClipboard(slug)}
+            ref={firstCopyRef}
+          >
+            <input
+              value={`${window.location.origin}/quiz/${slug}`}
+              readOnly
+              className="h-8 w-full cursor-pointer pr-4 text-black focus:outline-none"
+            />
+            <Icon />
+          </div>
+        </Tooltip>
+      </label>
+      <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">
+        Quiz leaderboard:
+        <Tooltip ref={secondCopyRef} text="Copy to clipboard">
+          <div
+            className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
+            onClick={() => copyToClipboard(`${slug}/results`)}
+            ref={secondCopyRef}
+          >
+            <input
+              value={`${window.location.origin}/quiz/${slug}/results`}
+              readOnly
+              className="h-8 w-full max-w-full cursor-pointer pr-4 text-black focus:outline-none"
+            />
+            <Icon />
+          </div>
+        </Tooltip>
+      </label>
     </div>
   );
 };
