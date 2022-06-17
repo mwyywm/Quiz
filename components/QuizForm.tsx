@@ -27,11 +27,10 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
     register,
     control,
     handleSubmit,
-    setFocus,
     setError,
     clearErrors,
     formState,
-    reset,
+    resetField,
     watch,
     trigger,
   } = useForm({
@@ -41,10 +40,11 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
       post: { message: undefined, error: undefined, type: undefined },
       submit: { message: undefined, error: undefined, type: undefined },
       questions: [
+        // initially empty strings in input fields
         {
           question: "",
           correctAnswer: "",
-          answers: ["", "", "", ""],
+          answers: ["", ""], // 2 answers initially
         },
       ],
     },
@@ -88,7 +88,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Something went wrong");
+          throw new Error("Something went wrong"); // the server errors out
         }
         return res.json();
       })
@@ -97,9 +97,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
         return clearErrors("post");
       })
       .catch((err) => {
-        reset({
-          title: "",
-        });
+        resetField("title");
         setError("post", {
           type: "custom",
           message: "Title already exists. Please choose another title.",
@@ -236,7 +234,7 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                 <React.Fragment key={field.id + i}>
                   <div className="flex items-center justify-center">
                     <input
-                      placeholder={`answer ${i + 1}`}
+                      placeholder={`Answer ${i + 1}`}
                       {...register(`questions.${index}.answers.${i}`, {
                         required: "Answer is required",
                       })}
