@@ -34,7 +34,19 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
     reset,
     watch,
     trigger,
-  } = useForm({});
+  } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      questions: [
+        {
+          question: "",
+          correctAnswer: "",
+          answers: ["", "", "", ""],
+        },
+      ],
+    },
+  });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
@@ -132,12 +144,6 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
       clearErrors("submit");
     }
   }, [questionsArr]);
-  useEffect(() => {
-    // appending initial question 1 to the form
-    append({ question: "", answers: [] });
-    // focus form title on component render
-    setFocus("title");
-  }, []);
   return (
     <>
       <h2 className="mt-4 text-lg text-white">New quiz</h2>
@@ -204,8 +210,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
               Question {index + 1}
             </label>
             <input
-              placeholder={`question ${index + 1}`}
-              {...register(`questions[${index}].question`, {
+              placeholder={`Question ${index + 1}`}
+              {...register(`questions.[${index}].question`, {
                 required: "Question is required",
               })}
               className={clsx(

@@ -14,7 +14,7 @@ export interface SentFormData {
 }
 
 const CreateQuizPage = () => {
-  const [sentFormData, setSentFormData] = useState(null as SentFormData | null);
+  const [sentFormData, setSentFormData] = useState<SentFormData>();
   return (
     <Layout>
       <section className="mb-24">
