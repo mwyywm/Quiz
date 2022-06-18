@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import Tooltip from "./Tooltip";
 import CheckIcon from "./SVG/CheckIcon";
 import CopyIcon from "./SVG/CopyIcon";
+import FadeInFadeOut from "./Animation/FadeInFadeOut";
+
 interface QuizType {
   id: number;
   title: string;
@@ -51,7 +53,13 @@ const QuizCreated = ({ quiz }: Props) => {
               readOnly
               className="h-8 w-full cursor-pointer pr-4 text-black focus:outline-none"
             />
-            {copiedObj.quizLink ? <CheckIcon /> : <CopyIcon />}
+            <div className="flex h-7 w-7 items-center justify-center">
+              <FadeInFadeOut
+                isOpen={copiedObj.quizLink}
+                falseChild={<CopyIcon />}
+                trueChild={<CheckIcon />}
+              />
+            </div>
           </div>
         </Tooltip>
       </label>
@@ -73,7 +81,13 @@ const QuizCreated = ({ quiz }: Props) => {
               readOnly
               className="h-8 w-full max-w-full cursor-pointer pr-4 text-black focus:outline-none"
             />
-            {copiedObj.quizResult ? <CheckIcon /> : <CopyIcon />}
+            <div className="flex h-7 w-7 items-center justify-center">
+              <FadeInFadeOut
+                isOpen={copiedObj.quizResult}
+                falseChild={<CopyIcon />}
+                trueChild={<CheckIcon />}
+              />
+            </div>
           </div>
         </Tooltip>
       </label>
