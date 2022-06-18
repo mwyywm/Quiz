@@ -15,11 +15,12 @@ export interface SentFormData {
 
 const CreateQuizPage = () => {
   const [sentFormData, setSentFormData] = useState<SentFormData>();
-  if (sentFormData) {
+  if (!sentFormData) {
     return (
       <Layout>
         <section className="mb-24">
-          <QuizCreated quiz={sentFormData} />
+          <QuizCreated quiz={{ title: "ye no", slug: "ye-no" }} />
+          {/* <QuizCreated quiz={sentFormData} /> */}
         </section>
       </Layout>
     );
