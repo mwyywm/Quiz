@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import FadeInFadeOut from "./Animation/FadeInFadeOut";
 import { CopiedObjTypes } from "./QuizCreated";
+import clsx from "clsx";
 import CheckIcon from "./SVG/CheckIcon";
 import CopyIcon from "./SVG/CopyIcon";
 import Tooltip from "./Tooltip";
@@ -20,21 +21,20 @@ const LinkQuiz = ({ slug, isOpen, setCopiedObj, linkType }: Props) => {
   return (
     <Tooltip ref={copyRef} text="Copy to clipboard" setCopiedObj={setCopiedObj}>
       <div
-        className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
+        role="button"
+        className={clsx(
+          "m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded border border-[#5c6070] bg-[#40434f] p-1"
+        )}
         onClick={() => copyToClipboard(slug)}
         ref={copyRef}
         data-name={linkType}
       >
-        <input
-          value={`${window.location.origin}/quiz/${slug}`}
-          readOnly
-          className="h-8 w-full cursor-pointer pr-4 text-black focus:outline-none"
-        />
-        <div className="flex h-7 w-7 items-center justify-center ">
+        <p className="h-8 w-full cursor-pointer truncate bg-[#40434f] pr-1 text-white focus:outline-none">{`${window.location.origin}/quiz/${slug}`}</p>
+        <div className="flex h-8 w-7 items-center justify-center">
           <FadeInFadeOut
             isOpen={isOpen}
-            falseChild={<CopyIcon />}
-            trueChild={<CheckIcon />}
+            falseChild={<CopyIcon fill="white" />}
+            trueChild={<CheckIcon fill="white" />}
           />
         </div>
       </div>

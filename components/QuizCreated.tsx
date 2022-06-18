@@ -22,7 +22,7 @@ const QuizCreated = ({ quiz }: Props) => {
   });
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
-      <h1 className="mb-6 text-center text-3xl font-bold text-white antialiased">
+      <h1 className="mb-6 max-w-full break-words text-center text-3xl font-bold text-white antialiased">
         {title} has been created
       </h1>
       <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">

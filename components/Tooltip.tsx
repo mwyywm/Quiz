@@ -108,22 +108,22 @@ const Tooltip = forwardRef(
                   isOpen={clicked}
                   falseChild={
                     <div className="mb-1 flex w-auto flex-col" role="tooltip">
-                      <div className="shadow-top-sm z-50 min-w-[150px] rounded bg-white p-1.5">
-                        <p className="relative text-center text-black">
+                      <div className="shadow-top-sm z-50 min-w-[150px] rounded bg-[#40434f] p-1.5">
+                        <p className="relative text-center text-white">
                           {text}
                         </p>
                       </div>
-                      <div className="z-40 m-auto -mt-1.5 h-3 w-3 rotate-45 bg-white" />
+                      <div className="z-40 m-auto -mt-1.5 h-3 w-3 rotate-45 bg-[#40434f]" />
                     </div>
                   }
                   trueChild={
                     <div className="mb-1 flex w-auto flex-col" role="tooltip">
-                      <div className="shadow-top-sm z-50 min-w-[150px] rounded bg-white p-1.5">
-                        <p className="relative text-center text-black">
+                      <div className="shadow-top-sm z-50 min-w-[150px] rounded bg-[#40434f] p-1.5">
+                        <p className="relative text-center text-white">
                           {clickedText}
                         </p>
                       </div>
-                      <div className="z-40 m-auto -mt-1.5 h-3 w-3 rotate-45 bg-white" />
+                      <div className="z-40 m-auto -mt-1.5 h-3 w-3 rotate-45 bg-[#40434f]" />
                     </div>
                   }
                 />

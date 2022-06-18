@@ -12,8 +12,8 @@ const Header = () => {
         <Link href="/createquiz">
           <a
             className={clsx(
-              "flex h-14 w-36 items-center justify-center rounded-sm bg-[#3A3949] py-2 px-1 transition-colors",
-              "hover:bg-gray-700 xs:p-3 xs:px-5"
+              "flex h-14 w-36 items-center justify-center rounded-sm bg-[#3A3949] py-2 px-1 text-center transition-colors duration-200 ease-in-out",
+              "hover:bg-[#424153] xs:p-3 xs:px-5"
             )}
           >
             Create quiz

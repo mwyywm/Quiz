@@ -100,7 +100,7 @@ const Quiz = ({ quiz }: Props) => {
                 key={answer}
                 className={clsx(
                   "min-h-[60px] w-full max-w-full break-all rounded-sm bg-white p-2 text-lg text-black",
-                  "dura transition-colors duration-200 ease-in-out",
+                  "transition-colors duration-200 ease-in-out",
                   {
                     "bg-[#ffad21]": selectedAnswer === answer,
                     "hover:bg-gray-300": selectedAnswer !== answer,
