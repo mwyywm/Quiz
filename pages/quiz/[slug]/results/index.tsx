@@ -31,15 +31,22 @@ const QuizResults = ({ quizResult, user }: Props) => {
         </h1>
         {user && (
           <div className="mb-10">
-            <h2 className="mb-4 break-words text-center text-3xl font-normal antialiased">
+            <h2 className="mb-4 break-words text-center text-2xl font-normal antialiased">
               Your score
             </h2>
             <QuizResultCard result={user} />
           </div>
         )}
-        {quizResult && (
+        {quizResult.results.length === 0 && (
+          <div className="mb-10">
+            <h2 className="mb-4 break-words text-center text-2xl font-normal antialiased">
+              No results have been submitted yet. 😢
+            </h2>
+          </div>
+        )}
+        {quizResult.results.length > 0 && (
           <div>
-            <h2 className="mb-4 break-words text-center text-3xl font-normal antialiased">
+            <h2 className="mb-4 break-words text-center text-2xl font-normal antialiased">
               Leaderboard
             </h2>
             <div className="flex flex-col gap-2">
