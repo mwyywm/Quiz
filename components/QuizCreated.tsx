@@ -53,7 +53,7 @@ const QuizCreated = ({ quiz }: Props) => {
               readOnly
               className="h-8 w-full cursor-pointer pr-4 text-black focus:outline-none"
             />
-            <div className="flex h-7 w-7 items-center justify-center">
+            <div className="flex h-7 w-7 items-center justify-center ">
               <FadeInFadeOut
                 isOpen={copiedObj.quizLink}
                 falseChild={<CopyIcon />}
