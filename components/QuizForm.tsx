@@ -31,8 +31,8 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
     clearErrors,
     formState,
     resetField,
-    watch,
     trigger,
+    setFocus,
   } = useForm({
     defaultValues: {
       title: "",
@@ -59,7 +59,6 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
     init: [undefined, undefined],
   });
   const [data, setData] = useState({});
-  const questionsArr = watch("questions");
   const onSubmit = async (data: any) => {
     // looping over the questions array and adding the correctAnswer as a string
     const formattedQuestions = data.questions.map(
@@ -105,17 +104,18 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
         return trigger("title", { shouldFocus: true });
       });
   };
-  const handleNewQuestion = (id: string) => {
-    const AddQuestion = (arrLen: number): number | undefined => {
-      if (arrLen >= 2 && arrLen < 4) {
-        return arrLen + 1;
-      } else if (arrLen === 4) {
+  const handleNewAnswer = (id: string) => {
+    // add a new answer to the array of answers for the question with the same id
+    // starts with 2 answers, total of 4.
+    const AddQuestion = (count: number) => {
+      if (count >= 2 && count < 4) {
+        return count + 1;
+      } else if (count === 4) {
         return 4;
       }
-      return;
     };
-    setAnswerAmount((prevState) => ({
-      ...prevState,
+    setAnswerAmount((prev) => ({
+      ...prev,
       [id]: Array.from({
         length: AddQuestion(answerAmount[id]!.length) as number,
       }),
@@ -133,17 +133,6 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
       }
     }
   }, [fields]);
-  useEffect(() => {
-    // handling errors when we dont have a question in the form
-    if (questionsArr?.length === 0) {
-      return setError("submit", {
-        type: "custom",
-        message: "Please add a question",
-      });
-    } else if (questionsArr?.length > 0) {
-      clearErrors("submit");
-    }
-  }, [questionsArr]);
   return (
     <>
       <h2 className="mt-4 text-lg text-white">New quiz</h2>
@@ -253,6 +242,9 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                         )}
                         onKeyDown={(e) => {
                           e.key === "Enter" && e.preventDefault();
+                          if (formState.errors.questions?.[index]?.answers) {
+                            trigger(`questions.${index}.answers`);
+                          }
                         }}
                       />
                       <input
@@ -306,11 +298,19 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                     "hover:bg-[#ffad21]",
                     index === 0 ? "mr-0 xs:mr-0" : "xs:mr-1"
                   )}
-                  onClick={() => handleNewQuestion(field.id)}
+                  onClick={() => {
+                    handleNewAnswer(field.id);
+                    trigger(`questions.${index}.answers`, {
+                      shouldFocus: true,
+                    });
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
-                      handleNewQuestion(field.id);
+                      handleNewAnswer(field.id);
+                      trigger(`questions.${index}.answers`, {
+                        shouldFocus: true,
+                      });
                     }
                   }}
                 >
@@ -331,6 +331,13 @@ export default function QuizForm({ setSentFormData }: QuizFormProps) {
                     if (e.key === "Enter") {
                       e.preventDefault();
                       remove(index);
+                      if (index === 0) {
+                        // focus the new index 0 question
+                        setFocus(`questions.${0}.question`);
+                      } else {
+                        // focus the question that is above the removed question
+                        setFocus(`questions.${index - 1}.question`);
+                      }
                     }
                   }}
                 >
