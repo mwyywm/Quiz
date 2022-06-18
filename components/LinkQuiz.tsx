@@ -9,12 +9,13 @@ interface Props {
   slug: string;
   isOpen: boolean;
   setCopiedObj: React.Dispatch<React.SetStateAction<CopiedObjTypes>>;
-  linkType: "quizLink" | "quizResult";
+  linkType: "quiz" | "results";
 }
 const LinkQuiz = ({ slug, isOpen, setCopiedObj, linkType }: Props) => {
   const copyToClipboard = (str: string) => {
     navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
   };
+
   const copyRef = useRef(null);
   return (
     <Tooltip ref={copyRef} text="Copy to clipboard" setCopiedObj={setCopiedObj}>
@@ -22,7 +23,7 @@ const LinkQuiz = ({ slug, isOpen, setCopiedObj, linkType }: Props) => {
         className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
         onClick={() => copyToClipboard(slug)}
         ref={copyRef}
-        data-name="quizLink"
+        data-name={linkType}
       >
         <input
           value={`${window.location.origin}/quiz/${slug}`}
