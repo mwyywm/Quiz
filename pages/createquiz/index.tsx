@@ -12,7 +12,6 @@ export interface SentFormData {
   slug: string;
   description: string;
 }
-
 const CreateQuizPage = () => {
   const [sentFormData, setSentFormData] = useState<SentFormData>();
   if (sentFormData) {

@@ -1,8 +1,5 @@
-import React, { useRef, useState } from "react";
-import Tooltip from "./Tooltip";
-import CheckIcon from "./SVG/CheckIcon";
-import CopyIcon from "./SVG/CopyIcon";
-import FadeInFadeOut from "./Animation/FadeInFadeOut";
+import React, { useState } from "react";
+import LinkQuiz from "./LinkQuiz";
 
 interface QuizType {
   id: number;
@@ -11,8 +8,8 @@ interface QuizType {
   description: string;
 }
 export interface CopiedObjTypes {
-  quizLink: boolean;
-  quizResult: boolean;
+  quiz: boolean;
+  results: boolean;
 }
 interface Props {
   quiz: QuizType;
@@ -20,76 +17,31 @@ interface Props {
 const QuizCreated = ({ quiz }: Props) => {
   const { title, slug } = quiz;
   const [copiedObj, setCopiedObj] = useState<CopiedObjTypes>({
-    quizLink: false,
-    quizResult: false,
+    quiz: false,
+    results: false,
   });
-  const firstCopyRef = useRef(null);
-  const secondCopyRef = useRef(null);
-
-  const copyToClipboard = (str: string) => {
-    navigator.clipboard.writeText(`${window.location.origin}/quiz/${str}`);
-  };
-
   return (
     <div className="m-auto w-[600px] max-w-full text-black">
-      <h1 className="mb-6 text-center text-3xl font-bold text-white antialiased">
+      <h1 className="mb-6 max-w-full break-words text-center text-3xl font-bold text-white antialiased">
         {title} has been created
       </h1>
       <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">
         Quiz link:
-        <Tooltip
-          ref={firstCopyRef}
-          text="Copy to clipboard"
+        <LinkQuiz
+          slug={slug}
+          isOpen={copiedObj.quiz}
           setCopiedObj={setCopiedObj}
-        >
-          <div
-            className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-            onClick={() => copyToClipboard(slug)}
-            ref={firstCopyRef}
-            data-name="quizLink"
-          >
-            <input
-              value={`${window.location.origin}/quiz/${slug}`}
-              readOnly
-              className="h-8 w-full cursor-pointer pr-4 text-black focus:outline-none"
-            />
-            <div className="flex h-7 w-7 items-center justify-center ">
-              <FadeInFadeOut
-                isOpen={copiedObj.quizLink}
-                falseChild={<CopyIcon />}
-                trueChild={<CheckIcon />}
-              />
-            </div>
-          </div>
-        </Tooltip>
+          linkType="quiz"
+        />
       </label>
       <label className="m-auto flex w-80 max-w-full flex-col text-lg text-white">
         Quiz leaderboard:
-        <Tooltip
-          ref={secondCopyRef}
-          text="Copy to clipboard"
+        <LinkQuiz
+          slug={`${slug}/results`}
+          isOpen={copiedObj.results}
           setCopiedObj={setCopiedObj}
-        >
-          <div
-            className="m-auto my-2 flex w-80 max-w-full cursor-pointer items-center justify-between rounded-sm bg-white p-1"
-            onClick={() => copyToClipboard(`${slug}/results`)}
-            ref={secondCopyRef}
-            data-name="quizResult"
-          >
-            <input
-              value={`${window.location.origin}/quiz/${slug}/results`}
-              readOnly
-              className="h-8 w-full max-w-full cursor-pointer pr-4 text-black focus:outline-none"
-            />
-            <div className="flex h-7 w-7 items-center justify-center">
-              <FadeInFadeOut
-                isOpen={copiedObj.quizResult}
-                falseChild={<CopyIcon />}
-                trueChild={<CheckIcon />}
-              />
-            </div>
-          </div>
-        </Tooltip>
+          linkType="results"
+        />
       </label>
     </div>
   );
