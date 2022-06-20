@@ -2,6 +2,7 @@ import { useState } from "react";
 import Layout from "../../components/Layout";
 import QuizForm from "../../components/QuizForm";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 const QuizCreated = dynamic(() => import("../../components/QuizCreated"), {
   ssr: false,
 });
@@ -25,6 +26,10 @@ const CreateQuizPage = () => {
   }
   return (
     <Layout>
+      <Head>
+        <title>Quiz - Create your own quiz!</title>
+        <meta name="description" content="Page for creating a quiz" />
+      </Head>
       <section className="mb-24">
         <div className="mx-auto w-[650px] max-w-full">
           <h1 className="text-center text-5xl font-bold antialiased">

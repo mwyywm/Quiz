@@ -5,6 +5,7 @@ import prisma from "../../../lib/prisma";
 import SubmittingQuiz from "../../../components/SubmittingQuiz";
 import QuizProgress from "../../../components/QuizProgress";
 import clsx from "clsx";
+import Head from "next/head";
 
 export interface QuizType {
   id: number;
@@ -37,7 +38,7 @@ const Quiz = ({ quiz }: Props) => {
     slug: quiz.slug,
     quizId: quiz.id,
     questions: {},
-  } as AnswersObjState);
+  });
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSubmitComponent, setShowSubmitComponent] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
@@ -70,6 +71,10 @@ const Quiz = ({ quiz }: Props) => {
   }
   return (
     <Layout>
+      <Head>
+        <title>Quiz - {quiz.title}</title>
+        <meta name="description" content={`Quiz about ${quiz.title}`} />
+      </Head>
       <div className="mx-auto w-[650px] max-w-full">
         <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
           {quiz.title}

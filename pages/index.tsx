@@ -1,4 +1,6 @@
 import React from "react";
+import Head from "next/head";
+
 import Layout from "../components/Layout";
 import QuizButton from "../components/QuizButton";
 import LinkAsButton from "../components/LinkAsButton";
@@ -12,6 +14,10 @@ const Landing = () => {
   return (
     <Layout>
       <section className="mb-24">
+        <Head>
+          <title>Quiz</title>
+          <meta name="description" content="Create your own quiz!" />
+        </Head>
         <div className="mx-auto w-[650px] max-w-full">
           <h1 className="text-center text-5xl font-bold antialiased">
             Create your own quiz!

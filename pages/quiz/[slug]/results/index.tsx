@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { GetServerSideProps } from "next/types";
 import Layout from "../../../../components/Layout";
 import QuizResultCard from "../../../../components/QuizResultCard";
@@ -25,6 +26,13 @@ const QuizResults = ({ quizResult, user }: Props) => {
   // if the user is falsy we just show the leaderboard.
   return (
     <Layout>
+      <Head>
+        <title>Quiz - {quizResult.title} results</title>
+        <meta
+          name="description"
+          content={`Results page for ${quizResult.title}`}
+        />
+      </Head>
       <div className="mx-auto mb-14 w-[650px] max-w-full">
         <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
           {quizResult.title}
