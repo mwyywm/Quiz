@@ -43,9 +43,12 @@ const Landing = ({ popularQuizzes, recommendedQuizzes }: Props) => {
         </div>
       </section>
       <section className="min-h-[200px]">
-        <h2 className="max-w-full break-words text-center text-3xl font-bold xs:text-4xl">
-          Most popular
-        </h2>
+        {popularQuizzes[0]?.title && (
+          // if we dont have any any popular quiz we dont show the <h2>
+          <h2 className="max-w-full break-words text-center text-3xl font-bold xs:text-4xl">
+            Most popular
+          </h2>
+        )}
         <div className="mt-12">
           {popularQuizzes.map((quiz) => (
             <div className="m-auto my-3 w-[650px] max-w-full" key={quiz.title}>
