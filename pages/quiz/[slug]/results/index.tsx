@@ -24,6 +24,15 @@ export interface ResultsType {
 const QuizResults = ({ quizResult, user }: Props) => {
   // if the user is true we show the result of the latest quiz made by the ?user= and the leaderboard.
   // if the user is falsy we just show the leaderboard.
+
+  if (!quizResult) {
+    // TODO: 404 component goes here
+    return (
+      <Layout>
+        <h1 className="text-2xl">404</h1>
+      </Layout>
+    );
+  }
   return (
     <Layout>
       <Head>
@@ -123,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       user:
         usernameResult?.results[usernameResult?.results.length - 1] && user
           ? usernameResult?.results[usernameResult?.results.length - 1]
-          : null, // The latest result for the ?user=
+          : null, // if there is a user we show latest result of the user ELSE we show null
     },
   };
 };

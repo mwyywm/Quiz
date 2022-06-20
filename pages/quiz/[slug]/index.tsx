@@ -33,12 +33,14 @@ interface Props {
 }
 
 const Quiz = ({ quiz }: Props) => {
-  const [answersObj, setAnswersObj] = useState<AnswersObjState>({
-    title: quiz.title,
-    slug: quiz.slug,
-    quizId: quiz.id,
-    questions: {},
-  });
+  const [answersObj, setAnswersObj] = useState<AnswersObjState>(
+    quiz && {
+      title: quiz.title,
+      slug: quiz.slug,
+      quizId: quiz.id,
+      questions: {},
+    }
+  ); // if quiz is truthy, we set answersObj. Otherwise the quiz is not yet created. Show 404.
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSubmitComponent, setShowSubmitComponent] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
@@ -66,9 +68,18 @@ const Quiz = ({ quiz }: Props) => {
       },
     });
   };
+  if (!quiz) {
+    // TODO: 404 component goes here
+    return (
+      <Layout>
+        <h1 className="text-2xl">404</h1>
+      </Layout>
+    );
+  }
   if (showSubmitComponent) {
     return <SubmittingQuiz quiz={quiz} answersObj={answersObj} />;
   }
+
   return (
     <Layout>
       <Head>
