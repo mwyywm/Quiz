@@ -8,9 +8,7 @@ type Props = {
 const Layout = ({ children }: Props) => (
   <>
     <Header />
-    <section className="mx-auto mt-24 w-[1200px] max-w-full px-2">
-      {children}
-    </section>
+    <main className="mx-auto mt-24 w-[1200px] max-w-full px-2">{children}</main>
   </>
 );
 

@@ -27,7 +27,7 @@ const Tooltip = forwardRef(
       clickedText = "Copied!",
       setCopiedObj,
     }: TooltipProps,
-    ref: React.ForwardedRef<any>
+    ref: React.ForwardedRef<HTMLDivElement>
   ) => {
     const [elementRect, setElementRect] = useState<
       ElementRectTypes | undefined

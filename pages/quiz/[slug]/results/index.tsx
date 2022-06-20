@@ -1,5 +1,5 @@
+import Head from "next/head";
 import { GetServerSideProps } from "next/types";
-import Layout from "../../../../components/Layout";
 import QuizResultCard from "../../../../components/QuizResultCard";
 import prisma from "../../../../lib/prisma";
 
@@ -23,8 +23,24 @@ export interface ResultsType {
 const QuizResults = ({ quizResult, user }: Props) => {
   // if the user is true we show the result of the latest quiz made by the ?user= and the leaderboard.
   // if the user is falsy we just show the leaderboard.
+
+  if (!quizResult) {
+    // TODO: 404 component goes here
+    return (
+      <>
+        <h1 className="text-2xl">404</h1>
+      </>
+    );
+  }
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Quiz - {quizResult.title} results</title>
+        <meta
+          name="description"
+          content={`Results page for ${quizResult.title}`}
+        />
+      </Head>
       <div className="mx-auto mb-14 w-[650px] max-w-full">
         <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
           {quizResult.title}
@@ -61,7 +77,7 @@ const QuizResults = ({ quizResult, user }: Props) => {
           </div>
         )}
       </div>
-    </Layout>
+    </>
   );
 };
 
@@ -115,7 +131,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       user:
         usernameResult?.results[usernameResult?.results.length - 1] && user
           ? usernameResult?.results[usernameResult?.results.length - 1]
-          : null, // The latest result for the ?user=
+          : null, // if there is a user we show latest result of the user ELSE we show null
     },
   };
 };
