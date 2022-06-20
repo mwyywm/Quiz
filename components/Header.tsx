@@ -4,8 +4,8 @@ import clsx from "clsx";
 
 const Header = () => {
   return (
-    <nav className="mx-auto flex h-28 w-full items-center">
-      <div className="mx-auto flex w-[1200px] max-w-full justify-between px-2">
+    <header className="mx-auto flex h-28 w-full items-center">
+      <nav className="mx-auto flex w-[1200px] max-w-full justify-between px-2">
         <Link href="/">
           <a className="flex items-center text-2xl font-semibold">Quiz</a>
         </Link>
@@ -19,8 +19,8 @@ const Header = () => {
             Create quiz
           </a>
         </Link>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 

@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next/types";
-import Layout from "../../../../components/Layout";
 import QuizResultCard from "../../../../components/QuizResultCard";
 import prisma from "../../../../lib/prisma";
 
@@ -28,13 +27,13 @@ const QuizResults = ({ quizResult, user }: Props) => {
   if (!quizResult) {
     // TODO: 404 component goes here
     return (
-      <Layout>
+      <>
         <h1 className="text-2xl">404</h1>
-      </Layout>
+      </>
     );
   }
   return (
-    <Layout>
+    <>
       <Head>
         <title>Quiz - {quizResult.title} results</title>
         <meta
@@ -78,7 +77,7 @@ const QuizResults = ({ quizResult, user }: Props) => {
           </div>
         )}
       </div>
-    </Layout>
+    </>
   );
 };
 

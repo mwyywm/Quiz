@@ -1,8 +1,6 @@
 import React from "react";
 import Head from "next/head";
 import prisma from "../lib/prisma";
-
-import Layout from "../components/Layout";
 import QuizButton from "../components/QuizButton";
 import LinkAsButton from "../components/LinkAsButton";
 import { GetStaticProps } from "next/types";
@@ -19,7 +17,7 @@ interface Props {
 
 const Landing = ({ popularQuizzes, recommendedQuizzes }: Props) => {
   return (
-    <Layout>
+    <>
       <section className="mb-24">
         <Head>
           <title>Quiz</title>
@@ -80,7 +78,7 @@ const Landing = ({ popularQuizzes, recommendedQuizzes }: Props) => {
           ))}
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 

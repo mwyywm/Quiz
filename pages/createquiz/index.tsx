@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Layout from "../../components/Layout";
 import QuizForm from "../../components/QuizForm";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -17,15 +16,15 @@ const CreateQuizPage = () => {
   const [sentFormData, setSentFormData] = useState<SentFormData>();
   if (sentFormData) {
     return (
-      <Layout>
+      <>
         <section className="mb-24">
           <QuizCreated quiz={sentFormData} />
         </section>
-      </Layout>
+      </>
     );
   }
   return (
-    <Layout>
+    <>
       <Head>
         <title>Quiz - Create your own quiz!</title>
         <meta name="description" content="Page for creating a quiz" />
@@ -48,7 +47,7 @@ const CreateQuizPage = () => {
           <QuizForm setSentFormData={setSentFormData} />
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 export default CreateQuizPage;

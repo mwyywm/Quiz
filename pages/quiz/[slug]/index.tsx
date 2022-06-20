@@ -1,4 +1,3 @@
-import Layout from "../../../components/Layout";
 import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import prisma from "../../../lib/prisma";
@@ -71,9 +70,9 @@ const Quiz = ({ quiz }: Props) => {
   if (!quiz) {
     // TODO: 404 component goes here
     return (
-      <Layout>
+      <>
         <h1 className="text-2xl">404</h1>
-      </Layout>
+      </>
     );
   }
   if (showSubmitComponent) {
@@ -81,7 +80,7 @@ const Quiz = ({ quiz }: Props) => {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Quiz - {quiz.title}</title>
         <meta name="description" content={`Quiz about ${quiz.title}`} />
@@ -147,7 +146,7 @@ const Quiz = ({ quiz }: Props) => {
           </button>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

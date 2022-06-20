@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "./Layout";
 import { useForm, SubmitHandler } from "react-hook-form";
 import clsx from "clsx";
 import LoadingSpinner from "./LoadingSpinner";
@@ -41,7 +40,7 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
   };
 
   return (
-    <Layout>
+    <>
       <div className="mx-auto w-[650px] max-w-full">
         <h1 className="mb-9 text-center text-5xl font-bold antialiased">
           {quiz.title}
@@ -93,7 +92,7 @@ const SubmittingQuiz = ({ quiz, answersObj }: Props) => {
           </div>
         </form>
       </div>
-    </Layout>
+    </>
   );
 };
 export default SubmittingQuiz;
