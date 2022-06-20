@@ -12,7 +12,7 @@ const LinkAsButton = ({ children, variant = "primary", ...props }: Props) => {
     <Link href={props.href}>
       <a
         className={clsx(
-          "flex h-14 min-w-[160px] items-center justify-center rounded-sm p-4 px-6 font-medium transition-colors",
+          "flex h-14 w-full items-center justify-center rounded-sm py-4 px-6 text-center font-medium transition-colors",
           {
             "border border-amber-500 bg-amber-500 text-black hover:bg-[#ffad21]":
               variant === "primary",

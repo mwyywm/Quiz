@@ -1,4 +1,3 @@
-import React from "react";
 import Head from "next/head";
 import prisma from "../lib/prisma";
 import QuizButton from "../components/QuizButton";
@@ -32,11 +31,11 @@ const Landing = ({ popularQuizzes, recommendedQuizzes }: Props) => {
             score compared to everyone else.
           </p>
         </div>
-        <div className="mx-auto mt-16 flex flex-wrap justify-center">
-          <div className="m-2 w-full xs:w-auto">
+        <div className="mt-16 flex flex-col items-center justify-center xs:flex-row">
+          <div className="m-2 w-full xs:w-auto xs:min-w-[160px]">
             <LinkAsButton href="/createquiz">Create quiz</LinkAsButton>
           </div>
-          <div className="m-2 w-full xs:w-auto">
+          <div className="m-2 w-full xs:w-auto xs:min-w-[160px]">
             <LinkAsButton href="/randomquiz" variant="secondary">
               Random quiz
             </LinkAsButton>

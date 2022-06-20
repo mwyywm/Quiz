@@ -5,6 +5,7 @@ import SubmittingQuiz from "../../../components/SubmittingQuiz";
 import QuizProgress from "../../../components/QuizProgress";
 import clsx from "clsx";
 import Head from "next/head";
+import NotFound from "../../../components/NotFound";
 
 export interface QuizType {
   id: number;
@@ -68,12 +69,7 @@ const Quiz = ({ quiz }: Props) => {
     });
   };
   if (!quiz) {
-    // TODO: 404 component goes here
-    return (
-      <>
-        <h1 className="text-2xl">404</h1>
-      </>
-    );
+    return <NotFound />;
   }
   if (showSubmitComponent) {
     return <SubmittingQuiz quiz={quiz} answersObj={answersObj} />;
@@ -152,6 +148,13 @@ const Quiz = ({ quiz }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const slug = ctx.params && ctx.params.slug;
+  if (!slug) {
+    return {
+      props: {
+        quiz: null,
+      },
+    };
+  }
   const prismaQuiz = await prisma.quiz.findUnique({
     where: {
       slug: slug && slug.toString(),

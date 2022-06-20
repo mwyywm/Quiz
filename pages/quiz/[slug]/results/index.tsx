@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next/types";
+import NotFound from "../../../../components/NotFound";
 import QuizResultCard from "../../../../components/QuizResultCard";
 import prisma from "../../../../lib/prisma";
 
@@ -25,12 +26,8 @@ const QuizResults = ({ quizResult, user }: Props) => {
   // if the user is falsy we just show the leaderboard.
 
   if (!quizResult) {
-    // TODO: 404 component goes here
-    return (
-      <>
-        <h1 className="text-2xl">404</h1>
-      </>
-    );
+    // this only happens if you try to access the results for a quiz that doesn't exist.
+    return <NotFound />;
   }
   return (
     <>
