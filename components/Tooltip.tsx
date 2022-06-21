@@ -1,7 +1,8 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useLayoutEffect, useState } from "react";
 import { CopiedObjTypes } from "./QuizCreated";
 import FadeInFadeOut from "./Animation/FadeInFadeOut";
 import Portal from "./Portal";
+
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -27,25 +28,22 @@ const Tooltip = forwardRef(
       clickedText = "Copied!",
       setCopiedObj,
     }: TooltipProps,
-    ref: React.ForwardedRef<HTMLDivElement>
+    ref: React.ForwardedRef<Element>
   ) => {
     const [elementRect, setElementRect] = useState<
       ElementRectTypes | undefined
-    >(undefined); // elementRect is a DOMRect
+    >(undefined);
     const [show, setShow] = useState(false);
     const [clicked, setClicked] = useState(false);
 
     const name =
       ref && "current" in ref && ref.current?.getAttribute("data-name");
 
-    useEffect(() => {
+    // on windows resize we need to recalculate the elementRect
+    useLayoutEffect(() => {
       if (ref && "current" in ref && ref.current) {
         setElementRect(ref.current.getBoundingClientRect());
       }
-    }, [ref]);
-
-    // on windows resize we need to recalculate the elementRect
-    useEffect(() => {
       window.addEventListener("resize", () => {
         if (ref && "current" in ref && ref.current) {
           setElementRect(ref.current.getBoundingClientRect());
@@ -71,6 +69,8 @@ const Tooltip = forwardRef(
         };
       }
     }, [clicked]);
+
+
     return (
       <React.Fragment>
         <div
@@ -87,7 +87,6 @@ const Tooltip = forwardRef(
               }));
             }
           }}
-          className="m-auto w-80 max-w-full"
         >
           {children}
         </div>
@@ -100,6 +99,7 @@ const Tooltip = forwardRef(
                   top: `${elementRect?.top - 40 + window.scrollY}px`,
                   left: `${elementRect.left + window.scrollX}px`,
                   width: `${elementRect.width}px`,
+                  // height minus position of the tooltip
                 }
               }
             >
@@ -108,7 +108,7 @@ const Tooltip = forwardRef(
                   isOpen={clicked}
                   falseChild={
                     <div className="mb-1 flex w-auto flex-col" role="tooltip">
-                      <div className="shadow-top-sm z-50 min-w-[150px] rounded bg-[#40434f] p-1.5">
+                      <div className="shadow-top-sm z-50 w-[150px] max-w-full rounded bg-[#40434f] p-1.5">
                         <p className="relative text-center text-white">
                           {text}
                         </p>
@@ -118,7 +118,7 @@ const Tooltip = forwardRef(
                   }
                   trueChild={
                     <div className="mb-1 flex w-auto flex-col" role="tooltip">
-                      <div className="shadow-top-sm z-50 min-w-[150px] rounded bg-[#40434f] p-1.5">
+                      <div className="shadow-top-sm z-50 w-[150px] max-w-full rounded bg-[#40434f] p-1.5">
                         <p className="relative text-center text-white">
                           {clickedText}
                         </p>
