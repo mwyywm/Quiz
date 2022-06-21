@@ -16,11 +16,9 @@ const CreateQuizPage = () => {
   const [sentFormData, setSentFormData] = useState<SentFormData>();
   if (sentFormData) {
     return (
-      <>
-        <section className="mb-24">
-          <QuizCreated quiz={sentFormData} />
-        </section>
-      </>
+      <section className="mb-24">
+        <QuizCreated quiz={sentFormData} />
+      </section>
     );
   }
   return (

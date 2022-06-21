@@ -1,4 +1,4 @@
-import { useSpring, animated, config } from "@react-spring/web";
+import { useSpring, animated } from "@react-spring/web";
 interface Props {
   current: number;
   total: number;
