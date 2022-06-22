@@ -12,6 +12,10 @@ export interface QuizResultType {
   id: number;
   title: string;
   results: ResultsType[];
+  questions: QuestionType[];
+}
+export interface QuestionType {
+  question: string;
 }
 export interface ResultsType {
   id: number;
@@ -29,6 +33,7 @@ const QuizResults = ({ quizResult, user }: Props) => {
     // this only happens if you try to access the results for a quiz that doesn't exist.
     return <NotFound />;
   }
+  const totalScore = quizResult.questions.length * 100;
   return (
     <>
       <Head>
@@ -39,15 +44,18 @@ const QuizResults = ({ quizResult, user }: Props) => {
         />
       </Head>
       <div className="mx-auto mb-14 w-[650px] max-w-full">
-        <h1 className="mb-4 break-words text-center text-[40px] font-bold antialiased">
+        <h1 className="mb-2 break-words text-center text-[40px] font-bold antialiased">
           {quizResult.title}
         </h1>
+        <p className="mb-8 text-center text-lg">
+          The highest score you can get on this quiz is {totalScore} points!
+        </p>
         {user && (
           <div className="mb-10">
             <h2 className="mb-4 break-words text-center text-2xl font-normal antialiased">
               Your score
             </h2>
-            <QuizResultCard result={user} />
+            <QuizResultCard result={user} totalScore={totalScore} />
           </div>
         )}
         {quizResult.results.length === 0 && (
@@ -65,6 +73,7 @@ const QuizResults = ({ quizResult, user }: Props) => {
             <div className="flex flex-col gap-2">
               {quizResult.results.map((result) => (
                 <QuizResultCard
+                  totalScore={totalScore}
                   result={result}
                   key={result.username}
                   showDate
@@ -108,6 +117,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     select: {
       id: true,
       title: true,
+      questions: {
+        select: {
+          question: true,
+        },
+      },
       results: {
         orderBy: {
           score: "desc",

@@ -1,6 +1,7 @@
 interface Props {
   result: ResultType;
   showDate?: boolean;
+  totalScore: number;
 }
 interface ResultType {
   id: number;
@@ -32,7 +33,7 @@ const useTimeAgo = (date: Date) => {
   }
 };
 
-const QuizResultCard = ({ result, showDate = false }: Props) => {
+const QuizResultCard = ({ result, showDate = false, totalScore }: Props) => {
   const resultCreatedAt = useTimeAgo(result.createdAt);
 
   return (
@@ -44,7 +45,8 @@ const QuizResultCard = ({ result, showDate = false }: Props) => {
         )}
       </div>
       <p className="max-w-[45%] break-words text-right text-xl">
-        {result.score * 100} points
+        {/* results.score is the percentage of correct answers so if you get 3 correct out of 9 it would be 0.333333333333 */}
+        {Math.ceil(totalScore * result.score)} points
       </p>
     </div>
   );
