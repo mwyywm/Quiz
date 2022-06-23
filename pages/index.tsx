@@ -64,11 +64,6 @@ const Landing = ({ popularQuizzes, recommendedQuizzes }: Props) => {
           Recommended
         </h3>
         <div className="mt-12 mb-12">
-          {/* <div className="m-auto my-5 grid w-[650px] max-w-full gap-3">
-            <QuizButton title="cool" questionsCount={12} slug="cool" />
-            <QuizButton title="fouro" questionsCount={20} slug="fouro" />
-            <QuizButton title="tenten" questionsCount={12} slug="tenten" />
-          </div> */}
           {recommendedQuizzes.map((quiz) => (
             <div className="m-auto my-3 w-[650px] max-w-full" key={quiz.title}>
               <QuizButton
@@ -117,9 +112,17 @@ export const getStaticProps: GetStaticProps = async () => {
     });
 
   const recommended = [
-    { title: "cool", slug: "cool", questionsCount: 12 },
-    { title: "fouro", slug: "fouro", questionsCount: 20 },
-    { title: "tenten", slug: "tenten", questionsCount: 12 },
+    {
+      title: "United States geography",
+      slug: "united-states-geography",
+      questionsCount: 5,
+    },
+    { title: "SQL Quiz", slug: "sql-quiz", questionsCount: 6 },
+    {
+      title: "HTML and CSS quiz",
+      slug: "html-and-css-quiz",
+      questionsCount: 8,
+    },
   ];
   return {
     props: {
