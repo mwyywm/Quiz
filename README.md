@@ -3,6 +3,11 @@
 Web application that allows you to make your own quiz and take other quizzes. After finishing a quiz you can see how you scored compared to others.
 
 Tech stack: Next, React, Typescript, Prisma and TailwindCSS.
+<div style="display: flex; gap: 5px;">
+  <img src="https://github.com/user-attachments/assets/5b138851-1de3-48b7-a1a0-84eb0485d1ce" height="150"/>
+  <img src="https://github.com/user-attachments/assets/2b43d9ae-f6d5-48f2-807f-c489589c3fc8" height="150"/>
+  <img src="https://github.com/user-attachments/assets/833af047-10ec-4fb7-988a-fdde7c1b9e73" height="150"/>
+</div>
 
 ## Run project locally
 
